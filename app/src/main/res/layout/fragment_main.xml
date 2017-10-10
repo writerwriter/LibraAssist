@@ -2,12 +2,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.writerwriter.libraassist.MainFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+        <it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow
+            android:id="@+id/coverFlow"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:coverHeight="150dp"
+            app:coverWidth="120dp"
+            app:maxScaleFactor="1.5"
+            app:reflectionGap="0px"
+            app:rotationThreshold="0.5"
+            app:scalingThreshold="0.5"
+            app:spacing="0.6"
+            />
+    <TextSwitcher
+        android:id="@+id/title"
+        android:paddingBottom="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerVertical="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        />
 
 </FrameLayout>

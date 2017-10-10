@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
 
-    private ViewPager viewPager;
+    private NonSwipeableViewPager viewPager;
 
     MainFragment mainFragment;
     CollectionFragment collectionFragment;
@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        viewPager = (ViewPager)findViewById(R.id.viewpager);
+        viewPager = (NonSwipeableViewPager) findViewById(R.id.viewpager);
 
         bottomNavigationView = (BottomNavigationView)findViewById(R.id.bottom_navigation);
 
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         });
         setupViewPager(viewPager);
     }
-    private void setupViewPager(ViewPager viewPager){
+    private void setupViewPager(NonSwipeableViewPager viewPager){
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         mainFragment = new MainFragment();
         collectionFragment = new CollectionFragment();

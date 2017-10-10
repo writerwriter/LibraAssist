@@ -29,4 +29,6 @@ dependencies {
     compile 'com.android.support:design:26.1.0'
     compile 'com.android.support:support-v4:26.+'
     testCompile 'junit:junit:4.12'
+    compile 'com.github.moondroid.coverflow:library:1.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }
