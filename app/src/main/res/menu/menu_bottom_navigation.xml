@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_home"
+        android:orderInCategory="0"
+        android:enabled="true"
+        android:icon="@drawable/ic_home"
+        android:title="Home"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_collection"
+        android:orderInCategory="1"
+        android:enabled="true"
+        android:icon="@drawable/ic_collection"
+        android:title="Collection"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_borrow"
+        android:orderInCategory="2"
+        android:enabled="true"
+        android:icon="@drawable/ic_borrow"
+        android:title="Borrow"
+        app:showAsAction="ifRoom"/>
+
+
+</menu>
