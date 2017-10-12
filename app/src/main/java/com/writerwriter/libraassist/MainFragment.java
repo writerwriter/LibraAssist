@@ -10,8 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import java.util.ArrayList;
@@ -59,6 +61,13 @@ public class MainFragment extends Fragment {
         newBooksAdapter = new NewBooksAdapter(newBooksList,getActivity());
         coverFlow = (FeatureCoverFlow)getView().findViewById(R.id.coverFlow);
         coverFlow.setAdapter(newBooksAdapter);
+
+        coverFlow.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+                Toast.makeText(getActivity(),newBooksList.get(position).getName(),Toast.LENGTH_SHORT).show();
+            }
+        });
 
         coverFlow.setOnScrollPositionListener(new FeatureCoverFlow.OnScrollPositionListener() {
             @Override

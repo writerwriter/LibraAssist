@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     MainFragment mainFragment;
     CollectionFragment collectionFragment;
     BorrowFragment borrowFragment;
+    LibraryInfoFragment libraryInfoFragment;
     MenuItem preMenuItem;
 
     @Override
@@ -69,9 +70,11 @@ public class MainActivity extends AppCompatActivity {
         mainFragment = new MainFragment();
         collectionFragment = new CollectionFragment();
         borrowFragment = new BorrowFragment();
+        libraryInfoFragment = new LibraryInfoFragment();
         adapter.addFragment(mainFragment);
         adapter.addFragment(collectionFragment);
         adapter.addFragment(borrowFragment);
+        adapter.addFragment(libraryInfoFragment);
         viewPager.setAdapter(adapter);
     }
 }
