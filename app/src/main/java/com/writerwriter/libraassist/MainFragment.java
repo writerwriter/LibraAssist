@@ -65,6 +65,7 @@ public class MainFragment extends Fragment {
         coverFlow.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+                if(newBooksList.size()>position)
                 Toast.makeText(getActivity(),newBooksList.get(position).getName(),Toast.LENGTH_SHORT).show();
             }
         });

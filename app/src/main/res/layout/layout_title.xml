@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="8dp"
+    android:padding="80dp"
     android:background="@drawable/label_bg"
     android:gravity="center"
     android:layout_alignParentBottom="true"
@@ -8,4 +8,6 @@
     android:visibility="gone"
     android:textAppearance="?android:textAppearanceSmallInverse"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" />
+    android:layout_height="wrap_content"
+    android:textColor="@color/colorTitle"
+    android:textSize="24sp"/>
