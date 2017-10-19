@@ -30,5 +30,6 @@ dependencies {
     compile 'com.android.support:support-v4:26.+'
     compile 'com.github.moondroid.coverflow:library:1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.github.ittianyu:BottomNavigationViewEx:1.2.1'
     testCompile 'junit:junit:4.12'
 }
