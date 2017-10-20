@@ -45,15 +45,10 @@ public class MainFragment extends Fragment {
     public void onStart() {
         super.onStart();
         initData();
-        mTitle = (TextSwitcher)getView().findViewById(R.id.title);
-        mTitle.setFactory(new ViewSwitcher.ViewFactory() {
-            @Override
-            public View makeView() {
-                LayoutInflater inflater = LayoutInflater.from(getActivity());
-                TextView txt = (TextView)inflater.inflate(R.layout.layout_title,null);
-                return txt;
-            }
-        });
+        if(mTitle==null) {
+            mTitle = (TextSwitcher) getView().findViewById(R.id.title);
+            mTitle.setFactory(mFactory);
+        }
         Animation in = AnimationUtils.loadAnimation(getActivity(),R.anim.slide_in_top);
         Animation out = AnimationUtils.loadAnimation(getActivity(),R.anim.slide_out_bottom);
         mTitle.setInAnimation(in);
@@ -83,6 +78,15 @@ public class MainFragment extends Fragment {
         });
 
     }
+
+    private ViewSwitcher.ViewFactory mFactory = new ViewSwitcher.ViewFactory() {
+        @Override
+        public View makeView() {
+            LayoutInflater inflater = LayoutInflater.from(getActivity());
+            TextView txt = (TextView)inflater.inflate(R.layout.layout_title,null);
+            return txt;
+        }
+    };
 
     private void initData() {
         newBooksList.add(new NewBooks("machine learning","https://www.analyticsvidhya.com/wp-content/uploads/2015/10/2.png"));
