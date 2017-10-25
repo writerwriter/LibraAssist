@@ -31,5 +31,7 @@ dependencies {
     compile 'com.github.moondroid.coverflow:library:1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.ittianyu:BottomNavigationViewEx:1.2.1'
+    compile 'com.android.support:recyclerview-v7:26.0.1'
+    compile 'com.android.support:cardview-v7:+'
     testCompile 'junit:junit:4.12'
 }
