@@ -15,9 +15,10 @@ import java.util.List;
  * Created by Larry on 2017/10/25.
  */
 
-public class Library_info_list_adapter extends RecyclerView.Adapter<Library_info_list_adapter.ViewHolder>{
+public class Library_info_list_adapter extends RecyclerView.Adapter<Library_info_list_adapter.ViewHolder> implements View.OnClickListener{
 
     private List<Library_info> library_infos;
+    private OnItemClickListener mOnItemClickListener = null;
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         public ImageView mImageView;
@@ -47,6 +48,7 @@ public class Library_info_list_adapter extends RecyclerView.Adapter<Library_info
         Context context = parent.getContext();
         View library_list_view = LayoutInflater.from(context).inflate(R.layout.library_info_card, parent, false);
         ViewHolder viewHolder = new ViewHolder(library_list_view);
+        library_list_view.setOnClickListener(this);
         return viewHolder;
     }
 
@@ -56,5 +58,20 @@ public class Library_info_list_adapter extends RecyclerView.Adapter<Library_info
         holder.mTextView.setText(library_info.getName());
         holder.mImageView.setImageResource(library_info.getImg());
         holder.mIconView.setImageResource(library_info.getIcon());
+        holder.itemView.setTag(position);
+    }
+
+    public static interface OnItemClickListener{
+        void onItemClick(View view, int position);
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(mOnItemClickListener != null){
+            mOnItemClickListener.onItemClick(view,(int)view.getTag());
+        }
+    }
+    public void setmOnItemClickListener(OnItemClickListener listener){
+        this.mOnItemClickListener = listener;
     }
 }

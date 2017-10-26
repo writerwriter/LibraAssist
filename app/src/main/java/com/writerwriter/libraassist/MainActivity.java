@@ -3,6 +3,7 @@ package com.writerwriter.libraassist;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.AnimatedVectorDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
@@ -12,6 +13,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -24,6 +26,7 @@ import android.widget.Toast;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.Set;
+import java.util.jar.Manifest;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private AnimatedVectorDrawable mMenu;
     private AnimatedVectorDrawable mBack;
 
-    Toolbar toolbar;
+    public static Toolbar toolbar;
 
     MainFragment mainFragment;
     CollectionFragment collectionFragment;
@@ -57,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.load_fragment,new MainFragment(),"homeFragment").commit();
 
-
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -70,8 +72,10 @@ public class MainActivity extends AppCompatActivity {
                             fragmentTransaction.add(R.id.load_fragment, new SettingsFragment(), "settingsFragment");
                             fragmentTransaction.addToBackStack("settingsFragment");
                             fragmentTransaction.commit();
-                            toolbar.setNavigationIcon(mMenu);
-                            mMenu.start();
+                            if(toolbar.getNavigationIcon() != getDrawable(R.drawable.ic_back_animatable)) {
+                                toolbar.setNavigationIcon(mMenu);
+                                mMenu.start();
+                            }
                         } else {
                             fragmentManager.popBackStack();
                             toolbar.setNavigationIcon(mBack);
@@ -87,8 +91,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 SettingsFragment settingsFragment = (SettingsFragment) getSupportFragmentManager().findFragmentByTag("settingsFragment");
+                LibraryInfoDetailFragment libraryInfoDetailFragment = (LibraryInfoDetailFragment) getSupportFragmentManager().findFragmentByTag("LibraryInfoDetailFragment");
                 if (settingsFragment != null) {
                     fragmentManager.popBackStack();
+                }
+                if (libraryInfoDetailFragment != null && settingsFragment == null) {
+                    fragmentManager.popBackStack();
+                    toolbar.setNavigationIcon(mBack);
+                    mBack.start();
+                }
+                if(settingsFragment != null && libraryInfoDetailFragment == null) {
                     toolbar.setNavigationIcon(mBack);
                     mBack.start();
                 }

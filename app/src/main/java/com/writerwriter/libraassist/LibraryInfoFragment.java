@@ -1,11 +1,17 @@
 package com.writerwriter.libraassist;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.AnimatedVectorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +24,8 @@ public class LibraryInfoFragment extends Fragment {
     private RecyclerView library_info_list;
     private LinearLayoutManager mLayoutManager;
     private List<Library_info> library_infos = new ArrayList<>();
+    private FragmentManager fragmentManager;
+    Toolbar toolbar = MainActivity.toolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,6 +50,30 @@ public class LibraryInfoFragment extends Fragment {
 
         Library_info_list_adapter adapter = new Library_info_list_adapter(library_infos);
         library_info_list.setAdapter(adapter);
+        adapter.setmOnItemClickListener(new Library_info_list_adapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                LibraryInfoDetailFragment libraryInfoDetailFragment = (LibraryInfoDetailFragment)getFragmentManager().findFragmentByTag("LibraryInfoDetailFragment");
+                if(libraryInfoDetailFragment == null) {
+                    fragmentTransaction.setCustomAnimations(R.anim.slide_frag_in_right, R.anim.slide_frag_out_right, R.anim.slide_frag_in_right, R.anim.slide_frag_out_right);
+                    fragmentTransaction.add(R.id.load_fragment,new LibraryInfoDetailFragment(), "LibraryInfoDetailFragment");
+                    fragmentTransaction.addToBackStack("LibraryInfoDetailFragment");
+                    fragmentTransaction.commit();
+                    AnimatedVectorDrawable mMenu = (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.ic_menu_animatable);
+                    toolbar.setNavigationIcon(mMenu);
+                    mMenu.start();
+                }
+                else{
+                    fragmentManager.popBackStack();
+                    AnimatedVectorDrawable mBack = (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.ic_back_animatable);
+                    toolbar.setNavigationIcon(mBack);
+                    mBack.start();
+                }
+
+            }
+        });
 
     }
 }
