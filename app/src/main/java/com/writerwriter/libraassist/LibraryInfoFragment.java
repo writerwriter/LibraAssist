@@ -25,7 +25,6 @@ public class LibraryInfoFragment extends Fragment {
     private LinearLayoutManager mLayoutManager;
     private List<Library_info> library_infos = new ArrayList<>();
     private FragmentManager fragmentManager;
-    Toolbar toolbar = MainActivity.toolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,15 +60,9 @@ public class LibraryInfoFragment extends Fragment {
                     fragmentTransaction.add(R.id.load_fragment,new LibraryInfoDetailFragment(), "LibraryInfoDetailFragment");
                     fragmentTransaction.addToBackStack("LibraryInfoDetailFragment");
                     fragmentTransaction.commit();
-                    AnimatedVectorDrawable mMenu = (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.ic_menu_animatable);
-                    toolbar.setNavigationIcon(mMenu);
-                    mMenu.start();
                 }
                 else{
                     fragmentManager.popBackStack();
-                    AnimatedVectorDrawable mBack = (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.ic_back_animatable);
-                    toolbar.setNavigationIcon(mBack);
-                    mBack.start();
                 }
 
             }

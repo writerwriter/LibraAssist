@@ -46,6 +46,16 @@ public class MainActivity extends AppCompatActivity {
     MenuItem preMenuItem;
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        SettingsFragment settingsFragment = (SettingsFragment)getSupportFragmentManager().findFragmentByTag("settingsFragment");
+        if(settingsFragment !=null){
+            toolbar.setNavigationIcon(mBack);
+            mBack.start();
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -91,16 +101,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 SettingsFragment settingsFragment = (SettingsFragment) getSupportFragmentManager().findFragmentByTag("settingsFragment");
-                LibraryInfoDetailFragment libraryInfoDetailFragment = (LibraryInfoDetailFragment) getSupportFragmentManager().findFragmentByTag("LibraryInfoDetailFragment");
                 if (settingsFragment != null) {
                     fragmentManager.popBackStack();
-                }
-                if (libraryInfoDetailFragment != null && settingsFragment == null) {
-                    fragmentManager.popBackStack();
-                    toolbar.setNavigationIcon(mBack);
-                    mBack.start();
-                }
-                if(settingsFragment != null && libraryInfoDetailFragment == null) {
                     toolbar.setNavigationIcon(mBack);
                     mBack.start();
                 }
@@ -129,6 +131,10 @@ public class MainActivity extends AppCompatActivity {
                             fragmentManager.popBackStack();
                             toolbar.setNavigationIcon(mBack);
                             mBack.start();
+                        }
+                        LibraryInfoDetailFragment libraryInfoDetailFragment = (LibraryInfoDetailFragment) getSupportFragmentManager().findFragmentByTag("LibraryInfoDetailFragment");
+                        if(libraryInfoDetailFragment!=null){
+                            fragmentManager.popBackStack();
                         }
                         switch (item.getItemId()) {
                             case R.id.action_home:
@@ -160,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+
 
         /*viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
             @Override
@@ -197,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(libraryInfoFragment);
         viewPager.setAdapter(adapter);
     }*/
-    }
+}
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);

@@ -2,7 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.writerwriter.libraassist.LibraryInfoDetailFragment">
+    android:background="#fcecc9"
+    tools:context="com.writerwriter.libraassist.LibraryInfoDetailFragment"
+    android:clickable="true">
 
     <TextView
         android:layout_width="match_parent"

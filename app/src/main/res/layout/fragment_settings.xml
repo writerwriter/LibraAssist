@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fcecc9"
-    tools:context="com.writerwriter.libraassist.SettingsFragment">
+    tools:context="com.writerwriter.libraassist.SettingsFragment"
+    android:clickable="true">
 
     <TextView
         android:layout_width="match_parent"
