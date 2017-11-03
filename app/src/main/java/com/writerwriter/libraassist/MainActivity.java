@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.load_fragment,new MainFragment(),"homeFragment").commit();
 
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+        /*toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return true;
             }
-        });
+        });*/
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        invalidateOptionsMenu();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                         //check existence to avoid recreating fragment
                         mainFragment = (MainFragment)getSupportFragmentManager().findFragmentByTag("homeFragment");
@@ -209,5 +210,48 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        switch(bottomNavigationView.getSelectedItemId()){
+            case R.id.action_collection:
+                menu.findItem(R.id.search).setVisible(true);
+                menu.findItem(R.id.action_notification).setVisible(true);
+                menu.findItem(R.id.action_settings).setVisible(true);
+                break;
+            default:
+                menu.findItem(R.id.search).setVisible(false);
+                menu.findItem(R.id.action_notification).setVisible(true);
+                menu.findItem(R.id.action_settings).setVisible(true);
+                break;
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                SettingsFragment settingsFragment = (SettingsFragment) getSupportFragmentManager().findFragmentByTag("settingsFragment");
+                if (settingsFragment == null) {
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.setCustomAnimations(R.anim.slide_frag_in_top, R.anim.slide_frag_out_top, R.anim.slide_frag_in_top, R.anim.slide_frag_out_top);
+                    fragmentTransaction.add(R.id.load_fragment, new SettingsFragment(), "settingsFragment");
+                    fragmentTransaction.addToBackStack("settingsFragment");
+                    fragmentTransaction.commit();
+                    if(toolbar.getNavigationIcon() != getDrawable(R.drawable.ic_back_animatable)) {
+                        toolbar.setNavigationIcon(mMenu);
+                        mMenu.start();
+                    }
+                } else {
+                    fragmentManager.popBackStack();
+                    toolbar.setNavigationIcon(mBack);
+                    mBack.start();
+                }
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
