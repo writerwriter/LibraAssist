@@ -1,5 +1,7 @@
 package com.writerwriter.libraassist;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.AnimatedVectorDrawable;
@@ -14,6 +16,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutCompat;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -142,24 +145,28 @@ public class MainActivity extends AppCompatActivity {
                                 if(mainFragment==null) {
                                     mainFragment = new MainFragment();
                                     fragmentTransaction.setCustomAnimations(R.anim.fade_in,R.anim.fade_out).replace(R.id.load_fragment, mainFragment, "homeFragment");
+                                    toolbar.setTitle("Home");
                                 }
                                 break;
                             case R.id.action_collection:
                                 if(collectionFragment==null) {
                                     collectionFragment = new CollectionFragment();
                                     fragmentTransaction.setCustomAnimations(R.anim.fade_in,R.anim.fade_out).replace(R.id.load_fragment, collectionFragment, "collectionFragment");
+                                    toolbar.setTitle("Collection");
                                 }
                                 break;
                             case R.id.action_borrow:
                                 if(borrowFragment==null) {
                                     borrowFragment = new BorrowFragment();
                                     fragmentTransaction.setCustomAnimations(R.anim.fade_in,R.anim.fade_out).replace(R.id.load_fragment, borrowFragment, "borrowFragment");
+                                    toolbar.setTitle("Borrow");
                                 }
                                 break;
                             case R.id.action_info:
                                 if(libraryInfoFragment==null) {
                                     libraryInfoFragment = new LibraryInfoFragment();
                                     fragmentTransaction.setCustomAnimations(R.anim.fade_in,R.anim.fade_out).replace(R.id.load_fragment, libraryInfoFragment, "libraryInfoFragment");
+                                    toolbar.setTitle("Info");
                                 }
                                 break;
                         }
