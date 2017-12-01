@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.Set;
+import java.util.concurrent.Delayed;
 import java.util.jar.Manifest;
 
 public class MainActivity extends AppCompatActivity {
@@ -47,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
     BorrowFragment borrowFragment;
     LibraryInfoFragment libraryInfoFragment;
     MenuItem preMenuItem;
+
+    SettingsFragment settingsFragment;
+    NotificationFragment notificationFragment;
 
     @Override
     public void onBackPressed() {
@@ -103,9 +107,8 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SettingsFragment settingsFragment = (SettingsFragment) getSupportFragmentManager().findFragmentByTag("settingsFragment");
-                if (settingsFragment != null) {
-                    fragmentManager.popBackStack();
+                fragmentManager.popBackStack();
+                if(fragmentManager.findFragmentByTag("notificationFragment")!=null && fragmentManager.findFragmentByTag("settingsFragment")==null || fragmentManager.findFragmentByTag("notificationFragment")==null && fragmentManager.findFragmentByTag("settingsFragment")!=null){
                     toolbar.setNavigationIcon(mBack);
                     mBack.start();
                 }
@@ -241,23 +244,48 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         switch (item.getItemId()) {
             case R.id.action_settings:
-                SettingsFragment settingsFragment = (SettingsFragment) getSupportFragmentManager().findFragmentByTag("settingsFragment");
+                settingsFragment = (SettingsFragment) getSupportFragmentManager().findFragmentByTag("settingsFragment");
                 if (settingsFragment == null) {
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.setCustomAnimations(R.anim.slide_frag_in_top, R.anim.slide_frag_out_top, R.anim.slide_frag_in_top, R.anim.slide_frag_out_top);
                     fragmentTransaction.add(R.id.load_fragment, new SettingsFragment(), "settingsFragment");
                     fragmentTransaction.addToBackStack("settingsFragment");
                     fragmentTransaction.commit();
-                    if(toolbar.getNavigationIcon() != getDrawable(R.drawable.ic_back_animatable)) {
+                    if(fragmentManager.findFragmentByTag("notificationFragment")==null) {
                         toolbar.setNavigationIcon(mMenu);
                         mMenu.start();
                     }
-                } else {
-                    fragmentManager.popBackStack();
-                    toolbar.setNavigationIcon(mBack);
-                    mBack.start();
+                }
+                else {
+                    if(fragmentManager.findFragmentByTag("settingsFragment") != fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount()-1)) fragmentManager.popBackStack();
+                    else fragmentManager.popBackStack("settingsFragment",FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    if(fragmentManager.findFragmentByTag("notificationFragment")==null){
+                        toolbar.setNavigationIcon(mBack);
+                        mBack.start();
+                    }
                 }
                 break;
+            case R.id.action_notification:
+                notificationFragment = (NotificationFragment) getSupportFragmentManager().findFragmentByTag("notificationFragment");
+                if(notificationFragment == null){
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.setCustomAnimations(R.anim.slide_frag_in_top, R.anim.slide_frag_out_top, R.anim.slide_frag_in_top, R.anim.slide_frag_out_top);
+                    fragmentTransaction.add(R.id.load_fragment, new NotificationFragment(), "notificationFragment");
+                    fragmentTransaction.addToBackStack("notificationFragment");
+                    fragmentTransaction.commit();
+                    if(fragmentManager.findFragmentByTag("settingsFragment")==null) {
+                        toolbar.setNavigationIcon(mMenu);
+                        mMenu.start();
+                    }
+                }
+                else {
+                    if(fragmentManager.findFragmentByTag("notificationFragment")!= fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount()-1))fragmentManager.popBackStack();
+                    else fragmentManager.popBackStack("notificationFragment",FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    if(fragmentManager.findFragmentByTag("settingsFragment")==null){
+                        toolbar.setNavigationIcon(mBack);
+                        mBack.start();
+                    }
+                }
         }
         return super.onOptionsItemSelected(item);
     }
