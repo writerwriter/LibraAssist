@@ -2,6 +2,7 @@ package com.writerwriter.libraassist;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.AnimatedVectorDrawable;
@@ -43,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static Toolbar toolbar;
 
+    private AccountManager mAccountManager;
+
     MainFragment mainFragment;
     CollectionFragment collectionFragment;
     BorrowFragment borrowFragment;
@@ -66,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mAccountManager = new AccountManager(MainActivity.this);
+        mAccountManager.Init();
 
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         toolbar.setTitle("Home");
@@ -288,5 +294,15 @@ public class MainActivity extends AppCompatActivity {
                 }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == AccountManager.RC_SIGN_IN) {
+            AccountManager.Instance.AuthenticateWithFirebase(data);
+        }
     }
 }

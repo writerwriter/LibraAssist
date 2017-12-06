@@ -1,14 +1,138 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fcecc9"
-    tools:context="com.writerwriter.libraassist.SettingsFragment"
-    android:clickable="true">
+    tools:context="com.writerwriter.libraassist.SettingsFragment">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/username_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="username"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textSize="24sp" />
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/google_signin_button"
+                android:layout_width="134dp"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"></LinearLayout>
+            </com.google.android.gms.common.SignInButton>
+
+            <Button
+                android:id="@+id/google_signout_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign out"
+                android:layout_toLeftOf="@id/google_signin_button"
+                android:visibility="visible" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/account_list"
+            android:layout_width="match_parent"
+            android:layout_height="520dp"
+            android:orientation="vertical"
+            android:scrollbars="vertical"
+            android:weightSum="1">
+
+            <Button
+                android:id="@+id/tcl_account_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:text="臺北市立圖書館\n未登入"
+                android:textSize="20sp"
+                android:textAllCaps="false" />
+
+            <EditText
+                android:id="@+id/tcl_account_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="account" />
+
+            <EditText
+                android:id="@+id/tcl_password_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="password" />
+
+            <Button
+                android:id="@+id/ntcl_account_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:text="新北市立圖書館\n未登入"
+                android:textAllCaps="false"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/ntcl_account_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="account" />
+
+            <EditText
+                android:id="@+id/ntcl_password_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="password" />
+
+            <Button
+                android:id="@+id/ntpul_account_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:defaultFocusHighlightEnabled="false"
+                android:enabled="false"
+                android:text="臺北大學圖書館\n未登入"
+                android:textAllCaps="false"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/ntpul_account_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="account" />
+
+            <EditText
+                android:id="@+id/ntpul_password_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="password" />
+
+        </LinearLayout>
+    </LinearLayout>
 
 </FrameLayout>

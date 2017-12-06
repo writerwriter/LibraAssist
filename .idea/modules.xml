@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/LibraAssist.iml" filepath="$PROJECT_DIR$/LibraAssist.iml" />
+      <module fileurl="file://E:\Workspace\Android Studio Projects\LibraAssist-master\LibraAssist.iml" filepath="E:\Workspace\Android Studio Projects\LibraAssist-master\LibraAssist.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
