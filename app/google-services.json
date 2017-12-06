@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "720700750764",
+    "firebase_url": "https://librassist-ea4a3.firebaseio.com",
+    "project_id": "librassist-ea4a3",
+    "storage_bucket": "librassist-ea4a3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:720700750764:android:74a970fb0f2fb5aa",
+        "android_client_info": {
+          "package_name": "com.writerwriter.libraassist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "720700750764-m6ggfavg32sff73dl0qjsqd9rmsdc1ro.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBABGsA9tkQ8cpw7wYEtr_Umsxos_cIRFQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
