@@ -49,7 +49,7 @@ public class AccountManager {
     private final AppCompatActivity mActivity;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private DatabaseReference ref;
+    public static DatabaseReference ref;
     private ChildEventListener mChildEventListener;
     private GoogleApiClient mGoogleApiClient;
     private HashMap<String, String> libraryAccount = new HashMap<>();

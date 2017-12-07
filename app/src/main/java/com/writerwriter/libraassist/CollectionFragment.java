@@ -14,8 +14,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.DatabaseReference;
+
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class CollectionFragment extends Fragment {
+    public static final String SEARCH_DATABASE_KEY = "search/key";
+
+    public static DatabaseReference ref;
 
     public CollectionFragment(){
 
@@ -43,6 +51,9 @@ public class CollectionFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                Map<String, Object> users = new HashMap<String, Object>();
+                users.put(SEARCH_DATABASE_KEY, query);
+                AccountManager.ref.updateChildren(users);
                 return true;
             }
 

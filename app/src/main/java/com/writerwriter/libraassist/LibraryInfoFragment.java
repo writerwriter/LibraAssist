@@ -29,19 +29,14 @@ public class LibraryInfoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_library_info, container, false);
-    }
 
-    @Override
-    public void onStart() {
-        super.onStart();
+        View v = inflater.inflate(R.layout.fragment_library_info, container, false);
 
         library_infos.add(new Library_info(R.drawable.ic_library_img1,"台北大學圖書館",R.drawable.ic_arrow_right_black_24px));
         library_infos.add(new Library_info(R.drawable.ic_library_img1,"新北市立圖書館",R.drawable.ic_arrow_right_black_24px));
         library_infos.add(new Library_info(R.drawable.ic_library_img1,"台北市立圖書館",R.drawable.ic_arrow_right_black_24px));
 
-        library_info_list = (RecyclerView)getView().findViewById(R.id.library_info_recyclerview);
+        library_info_list = (RecyclerView)v.findViewById(R.id.library_info_recyclerview);
         library_info_list.setHasFixedSize(true);
 
         mLayoutManager = new LinearLayoutManager(getActivity());
@@ -68,5 +63,8 @@ public class LibraryInfoFragment extends Fragment {
             }
         });
 
+        // Inflate the layout for this fragment
+        return v;
     }
+
 }
