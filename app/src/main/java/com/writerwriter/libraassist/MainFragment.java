@@ -89,7 +89,7 @@ public class MainFragment extends Fragment {
     };
 
     private void initData() {
-        newBooksList.add(new NewBooks("machine learning","https://www.analyticsvidhya.com/wp-content/uploads/2015/10/2.png"));
+        newBooksList.add(new NewBooks("machine learning","http://static.findbook.tw/image/book/019588597X/large"));
         newBooksList.add(new NewBooks("machine learning","https://dataissexy.files.wordpress.com/2014/06/51tc7h5-i7l-_sx342_.jpg"));
         newBooksList.add(new NewBooks("machine learning","http://whatpixel.com/images/2016/09/machine-learning-for-dummies.jpg"));
     }
