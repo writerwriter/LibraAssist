@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.InputStream;
 import java.util.List;
 
@@ -26,22 +28,26 @@ public class CollectionSearchResultAdapter extends RecyclerView.Adapter<Collecti
 
     private List<CollectionSearchResultUnit> collectionSearchResults;
     private OnItemClickListener mOnItemClickListener = null;
+    private Context context;
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         public ImageView mImageView;
         public TextView mTextView;
         public TextView mTextView2;
+        public TextView mTextView3;
         public ViewHolder(View itemView){
             super(itemView);
 
             mImageView = (ImageView)itemView.findViewById(R.id.bookcover);
             mTextView = (TextView)itemView.findViewById(R.id.book_name);
             mTextView2 = (TextView) itemView.findViewById(R.id.author);
+            mTextView3 = (TextView) itemView.findViewById(R.id.library);
         }
 
     }
 
-    public CollectionSearchResultAdapter(List<CollectionSearchResultUnit> collectionSearchResults){
+    public CollectionSearchResultAdapter(Context context, List<CollectionSearchResultUnit> collectionSearchResults){
+        this.context = context;
         this.collectionSearchResults = collectionSearchResults;
     }
 
@@ -62,11 +68,12 @@ public class CollectionSearchResultAdapter extends RecyclerView.Adapter<Collecti
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         CollectionSearchResultUnit collectionSearchResultUnit = collectionSearchResults.get(position);
-        holder.mTextView.setText(collectionSearchResultUnit.getName());
-        new DownloadImageTask(holder.mImageView)
-                .execute(collectionSearchResultUnit.getImg());
+        holder.mTextView.setText("書名:"+collectionSearchResultUnit.getName());
 
-        holder.mTextView2.setText(collectionSearchResultUnit.getAuthor());
+        Picasso.with(context).load(collectionSearchResultUnit.getImg()).into(holder.mImageView);
+
+        holder.mTextView2.setText("作者:"+collectionSearchResultUnit.getAuthor());
+        holder.mTextView3.setText("館藏地:"+collectionSearchResultUnit.getLibrary());
         holder.itemView.setTag(position);
     }
 
@@ -87,28 +94,10 @@ public class CollectionSearchResultAdapter extends RecyclerView.Adapter<Collecti
     public void setmOnItemClickListener(OnItemClickListener listener){
         this.mOnItemClickListener = listener;
     }
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
 
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
 
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 }

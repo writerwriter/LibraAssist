@@ -2,7 +2,10 @@ package com.writerwriter.libraassist;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
@@ -16,12 +19,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -186,15 +191,19 @@ public class CollectionFragment extends Fragment {
         collectionSearchResultUnits.clear();
         for (CollectionSearchResultUnit info : searchResult.values()){
             collectionSearchResultUnits.add(info);
+
         }
         collectionSearchResults = getView().findViewById(R.id.colleciton_recyclerview);
         collectionSearchResults.setHasFixedSize(true);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         collectionSearchResults.setLayoutManager(linearLayoutManager);
-        CollectionSearchResultAdapter collectionSearchResultAdapter = new CollectionSearchResultAdapter(collectionSearchResultUnits);
+        CollectionSearchResultAdapter collectionSearchResultAdapter = new CollectionSearchResultAdapter(getContext(),collectionSearchResultUnits);
+        collectionSearchResultAdapter.setHasStableIds(true);
+        collectionSearchResultAdapter.notifyDataSetChanged();
         collectionSearchResults.setAdapter(collectionSearchResultAdapter);
         Log.d(LOG_FLAG, "Show BookList Num:"+searchResult.size());
         isXinpei_url = 999999;
         isNtpu_url = 999999;
     }
+
 }

@@ -58,6 +58,8 @@ public class CollectionSearchResultUnit {
         return author;
     }
 
+    public String getLibrary(){return location;}
+
     public String getDetail() {
         if (searchState.equals("true"))
             return   "書名         : "+title+"\n"
