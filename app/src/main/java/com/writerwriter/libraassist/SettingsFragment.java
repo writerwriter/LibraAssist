@@ -2,6 +2,8 @@ package com.writerwriter.libraassist;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,24 +15,48 @@ import android.widget.TextView;
 import com.google.android.gms.common.SignInButton;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SettingsFragment extends Fragment{
     public static SettingsFragment Instance;
     private TextView userNameText;
     private SignInButton googleSigninBtn;
     private Button googleSignoutBtn;
     private Button[] libraryBtn = new Button[3];
+    private List<AccountUnit> account_list = new ArrayList<>();
+    private LinearLayoutManager linearLayoutManager;
+    private RecyclerView account_recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_settings, container, false);
+        account_list.add(new AccountUnit(null,null,"國立台北大學圖書館"));
+        account_list.add(new AccountUnit(null,null,"新北市立圖書館"));
+        account_list.add(new AccountUnit(null,null,"台北市立圖書館"));
+
+        account_recyclerView = (RecyclerView)v.findViewById(R.id.account_recyclerlist);
+        account_recyclerView.setHasFixedSize(true);
+
+        linearLayoutManager = new LinearLayoutManager(getActivity());
+        account_recyclerView.setLayoutManager(linearLayoutManager);
+
+        AccountListAdapter adapter = new AccountListAdapter(account_list);
+        account_recyclerView.setAdapter(adapter);
+
+
+
         Instance = this;
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false);
+        return v;
     }
 
     @Override
     public void onStart(){
         super.onStart();
+
+
 
         // 用戶名稱 TextView
         userNameText = getView().findViewById(R.id.username_text);
@@ -51,7 +77,7 @@ public class SettingsFragment extends Fragment{
                 AccountManager.Instance.GoogleSignOut();
             }
         });
-        // 台北市圖書館 Botton
+        /*// 台北市圖書館 Botton
         libraryBtn[0] = getView().findViewById(R.id.tcl_account_btn);
         libraryBtn[0].setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,10 +106,10 @@ public class SettingsFragment extends Fragment{
                         ((EditText)getView().findViewById(R.id.ntpul_account_edit)).getText().toString(),
                         ((EditText)getView().findViewById(R.id.ntpul_password_edit)).getText().toString());
             }
-        });
+        });*/
 
 
-        UpdateUI(FirebaseAuth.getInstance().getCurrentUser() != null);
+        //UpdateUI(FirebaseAuth.getInstance().getCurrentUser() != null);
     }
 
     @Override
@@ -97,25 +123,25 @@ public class SettingsFragment extends Fragment{
             googleSigninBtn.setVisibility(View.INVISIBLE);
             googleSignoutBtn.setVisibility(View.VISIBLE);
             userNameText.setText(AccountManager.Instance.GetGoogleAccountName());
-            for (Button btn : libraryBtn) {
+            /*for (Button btn : libraryBtn) {
                 btn.setEnabled(true);
-            }
+            }*/
         }
         else {
             googleSigninBtn.setVisibility(View.VISIBLE);
             googleSignoutBtn.setVisibility(View.INVISIBLE);
             userNameText.setText(AccountManager.Instance.GetGoogleAccountName());
-            for (Button btn : libraryBtn) {
+            /*for (Button btn : libraryBtn) {
                 btn.setEnabled(false);
-            }
+            }*/
         }
-        UpdateAccount(AccountManager.TAIPEI_LIB_KEY);
+        /*UpdateAccount(AccountManager.TAIPEI_LIB_KEY);
         UpdateAccount(AccountManager.NEWTAIPEI_LIB_KEY);
-        UpdateAccount(AccountManager.NTPU_LIB_KEY);
+        UpdateAccount(AccountManager.NTPU_LIB_KEY);*/
     }
 
     // 更新帳號按鈕文字
-    public void UpdateAccount(String lib){
+    /*public void UpdateAccount(String lib){
         String account = AccountManager.Instance.GetLibraryAccount(lib);
         switch (lib) {
             case AccountManager.TAIPEI_LIB_KEY:
@@ -134,5 +160,5 @@ public class SettingsFragment extends Fragment{
                 libraryBtn[2].setText("臺北大學圖書館\n"+(account==null?"未登入":"帳號 : "+account));
                 break;
         }
-    }
+    }*/
 }
