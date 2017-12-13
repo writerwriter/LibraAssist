@@ -35,13 +35,13 @@ import java.util.Map;
 
 public class AccountManager {
     public static AccountManager Instance;
+    private static final String LOG_FLAG = "---AccountManager---";
 
     public static final int RC_SIGN_IN = 1;
     public static final String TAIPEI_LIB_KEY = "tc_lib";
     public static final String NEWTAIPEI_LIB_KEY = "ntc_lib";
     public static final String NTPU_LIB_KEY = "ntpu_lib";
-    private static final String LOG_FLAG = "---AccountManager---";
-    private static final String USER_DATABASE_PATH = "user_data/";
+    private static final String USER_DATABASE_PATH = "user_data";
     private static final String ACCOUNT_DATABASE_KEY = "library_account";
 
     public FirebaseAuth mAuth;
@@ -82,8 +82,8 @@ public class AccountManager {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     Log.d(LOG_FLAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    // 設定db路徑為 Account/uid 若id!=googleid將會無法存取
-                    ref = database.getReference(USER_DATABASE_PATH + mAuth.getCurrentUser().getUid());
+                    // 設定db路徑 若id!=googleid將會無法存取
+                    ref = database.getReference(USER_DATABASE_PATH+"/"+mAuth.getCurrentUser().getUid());
                     if (mChildEventListener != null) {
                         ref.removeEventListener(mChildEventListener);
                     }
@@ -218,6 +218,14 @@ public class AccountManager {
             Log.d(LOG_FLAG, "ERROR : Google Sign In failed.");
             Toast.makeText(mActivity.getApplicationContext(), "ERROR : Google Sign In failed.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    // 取得 User Database 路徑
+    public DatabaseReference GetUserDatabaseRef(String path){
+        if(mAuth != null)
+            return database.getReference(USER_DATABASE_PATH+"/"+mAuth.getCurrentUser().getUid()+"/"+path);
+        else
+            return null;
     }
 
     // 取得 google 名稱

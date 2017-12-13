@@ -1,6 +1,7 @@
 package com.writerwriter.libraassist;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.InputStream;
 import java.util.List;
@@ -74,9 +76,13 @@ public class CollectionSearchResultAdapter extends RecyclerView.Adapter<Collecti
 
     @Override
     public void onClick(View view) {
-        if(mOnItemClickListener != null){
+        if (mOnItemClickListener != null){
             mOnItemClickListener.onItemClick(view,(int)view.getTag());
         }
+        // 暫時顯示詳細資訊
+        Toast.makeText(view.getContext(),
+                collectionSearchResults.get((int)view.getTag()).getDetail(),
+                Toast.LENGTH_LONG).show();
     }
     public void setmOnItemClickListener(OnItemClickListener listener){
         this.mOnItemClickListener = listener;
