@@ -53,7 +53,7 @@ public class MainFragment extends Fragment {
                     for (HashMap<String, String> data : list.values()) {
                         newBooksList.add(new CollectionSearchResultUnit(data));
                     }
-                    newBooksAdapter.notifyDataSetChanged();
+                    coverFlow.setAdapter(newBooksAdapter);
 
                     newbookRef.removeEventListener(mNewbookEventListener);
                     Log.d(LOG_FLAG, "Got Newbook List. Num : "+newBooksAdapter.getCount());
@@ -70,7 +70,6 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         return inflater.inflate(R.layout.fragment_main, container, false);
     }
 
@@ -81,14 +80,17 @@ public class MainFragment extends Fragment {
             mTitle = getView().findViewById(R.id.title);
             mTitle.setFactory(mFactory);
         }
-        Animation in = AnimationUtils.loadAnimation(getActivity(),R.anim.slide_in_top);
-        Animation out = AnimationUtils.loadAnimation(getActivity(),R.anim.slide_out_bottom);
+        Animation in = AnimationUtils.loadAnimation(getActivity(),R.anim.fade_in);
+        Animation out = AnimationUtils.loadAnimation(getActivity(),R.anim.fade_out);
         mTitle.setInAnimation(in);
         mTitle.setOutAnimation(out);
 
         // 放一本假的書進去 不然會跳錯誤 (divide 0)
-        newBooksList.add(new CollectionSearchResultUnit());
+        if(newBooksList.isEmpty()) {
+            newBooksList.add(new CollectionSearchResultUnit());
+        }
         newBooksAdapter = new NewBooksAdapter(newBooksList, getActivity());
+        newBooksAdapter.notifyDataSetChanged();
 
         coverFlow = getView().findViewById(R.id.coverFlow);
         coverFlow.setAdapter(newBooksAdapter);
