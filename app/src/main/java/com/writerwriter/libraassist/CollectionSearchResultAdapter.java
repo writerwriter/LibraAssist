@@ -38,10 +38,10 @@ public class CollectionSearchResultAdapter extends RecyclerView.Adapter<Collecti
         public ViewHolder(View itemView){
             super(itemView);
 
-            mImageView = (ImageView)itemView.findViewById(R.id.bookcover);
-            mTextView = (TextView)itemView.findViewById(R.id.book_name);
-            mTextView2 = (TextView) itemView.findViewById(R.id.author);
-            mTextView3 = (TextView) itemView.findViewById(R.id.library);
+            mImageView = itemView.findViewById(R.id.bookcover);
+            mTextView  = itemView.findViewById(R.id.book_name);
+            mTextView2 = itemView.findViewById(R.id.author);
+            mTextView3 = itemView.findViewById(R.id.library);
         }
 
     }
@@ -68,7 +68,7 @@ public class CollectionSearchResultAdapter extends RecyclerView.Adapter<Collecti
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         CollectionSearchResultUnit collectionSearchResultUnit = collectionSearchResults.get(position);
-        holder.mTextView.setText("書名:"+collectionSearchResultUnit.getName());
+        holder.mTextView.setText("書名:"+collectionSearchResultUnit.getTitle());
 
         Picasso.with(context).load(collectionSearchResultUnit.getImg()).into(holder.mImageView);
 
@@ -77,7 +77,7 @@ public class CollectionSearchResultAdapter extends RecyclerView.Adapter<Collecti
         holder.itemView.setTag(position);
     }
 
-    public static interface OnItemClickListener{
+    public interface OnItemClickListener{
         void onItemClick(View view, int position);
     }
 
