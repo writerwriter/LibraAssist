@@ -17,10 +17,10 @@ import java.util.List;
  */
 
 public class NewBooksAdapter extends BaseAdapter {
-    private List<NewBooks> newBooksList;
+    private List<CollectionSearchResultUnit> newBooksList;
     private Context mContext;
 
-    public NewBooksAdapter(List<NewBooks> newBooksList, Context mContext) {
+    public NewBooksAdapter(List<CollectionSearchResultUnit> newBooksList, Context mContext) {
         this.newBooksList = newBooksList;
         this.mContext = mContext;
     }
@@ -46,12 +46,12 @@ public class NewBooksAdapter extends BaseAdapter {
         if(rowView == null){
             rowView = LayoutInflater.from(mContext).inflate(R.layout.layout_item,null);
 
-            TextView name = (TextView)rowView.findViewById(R.id.label);
-            ImageView image = (ImageView)rowView.findViewById(R.id.image);
+            TextView name = rowView.findViewById(R.id.label);
+            ImageView image = rowView.findViewById(R.id.image);
 
             //set data
-            Picasso.with(mContext).load(newBooksList.get(i).getImageURL()).into(image);
-            name.setText(newBooksList.get(i).getName());
+            Picasso.with(mContext).load(newBooksList.get(i).getImg()).into(image);
+            name.setText(newBooksList.get(i).getTitle());
         }
         return rowView;
     }

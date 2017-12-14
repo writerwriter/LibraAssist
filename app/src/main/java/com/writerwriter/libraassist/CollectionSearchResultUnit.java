@@ -15,50 +15,52 @@ import java.util.HashMap;
  */
 
 public class CollectionSearchResultUnit {
-    public String isbn;
-    public String title;
-    public String author;
-    public String img;
-    public String publish_year;
-    public String publisher;
-    public String location;
-    public String storage;
-    public String link;
-    public String searchState;
+    private static final String NULL_TITLE = "取得資料中...";
+    private static final String NULL_IMG = "https://www.cmswing.com/u/avatar/131";
+    private static final String ERROR_IMG = "http://www.51allout.co.uk/wp-content/uploads/2012/02/Image-not-found.gif";
+
+    private String isbn;
+    private String title = NULL_TITLE;
+    private String author = NULL_IMG;
+    private String img;
+    private String publish_year;
+    private String publisher;
+    private String location;
+    private String storage;
+    private String link;
+    private String searchState = "null";
 
     public CollectionSearchResultUnit() {
     }
 
-    public CollectionSearchResultUnit(HashMap<String, Object> data) {
+    public CollectionSearchResultUnit(HashMap<String, String> data) {
         SetInfo(data);
     }
 
-    public void SetInfo(HashMap<String, Object> data) {
-        isbn = (String)data.get("isbn");
-        title = (String)data.get("title");
-        author = (String)data.get("author");
-        img = (String)data.get("img");
-        publish_year = (String)data.get("publish_year");
-        publisher = (String)data.get("publisher");
-        link = (String)data.get("link");
-        location = (String)data.get("location");
-        storage = (String)data.get("storage");
-        searchState = (String)data.get("searchState");
+    public void SetInfo(HashMap<String, String> data) {
+        if(data.get("isbn") != null) isbn = data.get("isbn");
+        if(data.get("title") != null) title = data.get("title");
+        if(data.get("author") != null) author = data.get("author");
+        if(data.get("img") != null) img = data.get("img");
+        if(data.get("publish_year") != null) publish_year = data.get("publish_year");
+        if(data.get("publisher") != null) publisher = data.get("publisher");
+        if(data.get("link") != null) link = data.get("link");
+        if(data.get("location") != null) location = data.get("location");
+        if(data.get("storage") != null) storage = data.get("storage");
+        if(data.get("searchState") != null) searchState = data.get("searchState");
+
+        if (img.equals("")) img = ERROR_IMG;
     }
 
-    public String getImg() {
-        return img;
-    }
+    public String getImg() { return img; }
 
-    public String getName() {
-        return title;
-    }
+    public String getTitle() { return title; }
 
-    public String getAuthor() {
-        return author;
-    }
+    public String getAuthor() { return author; }
 
-    public String getLibrary(){return location;}
+    public String getLibrary() { return location; }
+
+    public String getLink() { return link; }
 
     public String getDetail() {
         if (searchState.equals("true"))
@@ -71,7 +73,13 @@ public class CollectionSearchResultUnit {
                     +"可借數量 : "+storage;
         else if (searchState.equals("false") || searchState.equals("Pending!"))
             return "搜尋詳細資訊中...";
+        else if (searchState.equals("null"))
+            return NULL_TITLE;
         else
             return "Error!!! State : "+searchState;
+    }
+
+    public boolean isNull() {
+        return searchState == "null";
     }
 }

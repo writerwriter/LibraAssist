@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,21 +17,53 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow;
 
 
 public class MainFragment extends Fragment {
+    private static final String LOG_FLAG = "---Main Fragment---";
+    private static final String NEWBOOK_PATH = "new_book";
 
     private FeatureCoverFlow coverFlow;
     private NewBooksAdapter newBooksAdapter;
-    private List<NewBooks> newBooksList = new ArrayList<>();
     private TextSwitcher mTitle;
 
-    public MainFragment(){
+    private DatabaseReference newbookRef;
+    private ChildEventListener mNewbookEventListener;
 
+    private static List<CollectionSearchResultUnit> newBooksList = new ArrayList<>();
+
+    public MainFragment(){
+        mNewbookEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                if (dataSnapshot.getKey().equals("search_result")){
+                    HashMap<String, HashMap<String, String>> list = (HashMap<String, HashMap<String, String>>)dataSnapshot.getValue();
+                    newBooksList.clear();
+                    for (HashMap<String, String> data : list.values()) {
+                        newBooksList.add(new CollectionSearchResultUnit(data));
+                    }
+                    newBooksAdapter.notifyDataSetChanged();
+
+                    newbookRef.removeEventListener(mNewbookEventListener);
+                    Log.d(LOG_FLAG, "Got Newbook List. Num : "+newBooksAdapter.getCount());
+                }
+            }
+            @Override public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {}
+            @Override public void onChildRemoved(DataSnapshot dataSnapshot) {}
+            @Override public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
+            @Override public void onCancelled(DatabaseError databaseError) {}
+        };
     }
 
     @Override
@@ -44,31 +77,33 @@ public class MainFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        initData();
-        if(mTitle==null) {
-            mTitle = (TextSwitcher) getView().findViewById(R.id.title);
+        if (mTitle == null) {
+            mTitle = getView().findViewById(R.id.title);
             mTitle.setFactory(mFactory);
         }
         Animation in = AnimationUtils.loadAnimation(getActivity(),R.anim.slide_in_top);
         Animation out = AnimationUtils.loadAnimation(getActivity(),R.anim.slide_out_bottom);
         mTitle.setInAnimation(in);
         mTitle.setOutAnimation(out);
-        newBooksAdapter = new NewBooksAdapter(newBooksList,getActivity());
-        coverFlow = (FeatureCoverFlow)getView().findViewById(R.id.coverFlow);
-        coverFlow.setAdapter(newBooksAdapter);
 
+        // 放一本假的書進去 不然會跳錯誤 (divide 0)
+        newBooksList.add(new CollectionSearchResultUnit());
+        newBooksAdapter = new NewBooksAdapter(newBooksList, getActivity());
+
+        coverFlow = getView().findViewById(R.id.coverFlow);
+        coverFlow.setAdapter(newBooksAdapter);
         coverFlow.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-                if(newBooksList.size()>position)
-                Toast.makeText(getActivity(),newBooksList.get(position).getName(),Toast.LENGTH_SHORT).show();
+                if(newBooksList.size() > position)
+                Toast.makeText(getActivity(), newBooksList.get(position).getDetail(), Toast.LENGTH_SHORT).show();
             }
         });
 
         coverFlow.setOnScrollPositionListener(new FeatureCoverFlow.OnScrollPositionListener() {
             @Override
             public void onScrolledToPosition(int position) {
-                mTitle.setText(newBooksList.get(position).getName());
+                mTitle.setText(newBooksList.get(position).getTitle());
             }
 
             @Override
@@ -76,7 +111,10 @@ public class MainFragment extends Fragment {
 
             }
         });
-
+        if (newBooksList.get(0).isNull()){
+            newbookRef = FirebaseDatabase.getInstance().getReference(NEWBOOK_PATH);
+            newbookRef.addChildEventListener(mNewbookEventListener);
+        }
     }
 
     private ViewSwitcher.ViewFactory mFactory = new ViewSwitcher.ViewFactory() {
@@ -87,11 +125,5 @@ public class MainFragment extends Fragment {
             return txt;
         }
     };
-
-    private void initData() {
-        newBooksList.add(new NewBooks("machine learning","http://static.findbook.tw/image/book/019588597X/large"));
-        newBooksList.add(new NewBooks("machine learning","https://dataissexy.files.wordpress.com/2014/06/51tc7h5-i7l-_sx342_.jpg"));
-        newBooksList.add(new NewBooks("machine learning","http://whatpixel.com/images/2016/09/machine-learning-for-dummies.jpg"));
-    }
 
 }
