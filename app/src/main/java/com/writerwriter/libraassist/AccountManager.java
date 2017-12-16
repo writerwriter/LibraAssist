@@ -114,7 +114,7 @@ public class AccountManager {
                         String account = ((HashMap<String, String>)iterSnapshot.getValue()).get("account").toString();
                         libraryAccount.put(iterSnapshot.getKey(), account);
                         if (SettingsFragment.Instance != null) {
-                            //SettingsFragment.Instance.UpdateAccount(iterSnapshot.getKey());
+                            SettingsFragment.Instance.UpdateAccount(iterSnapshot.getKey());
                         }
                     }
                 }
@@ -146,7 +146,7 @@ public class AccountManager {
                         DataSnapshot iterSnapshot = iter.next();
                         libraryAccount.remove(iterSnapshot.getKey());
                         if (SettingsFragment.Instance != null) {
-                            //SettingsFragment.Instance.UpdateAccount(iterSnapshot.getKey());
+                            SettingsFragment.Instance.UpdateAccount(iterSnapshot.getKey());
                         }
                     }
                 }
@@ -182,11 +182,18 @@ public class AccountManager {
     public void GoogleSignIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         mActivity.startActivityForResult(signInIntent, RC_SIGN_IN);
+        if(SettingsFragment.Instance!=null){
+            SettingsFragment.Instance.UpdateUI(true);
+        }
     }
 
     // Google 登出
     public void GoogleSignOut() {
         mAuth.signOut();
+        if(SettingsFragment.Instance!=null){
+            SettingsFragment.Instance.UpdateUI(false);
+        }
+
     }
 
     // 取得 Firebase 身分驗證

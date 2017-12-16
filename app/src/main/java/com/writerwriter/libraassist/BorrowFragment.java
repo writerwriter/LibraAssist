@@ -26,6 +26,7 @@ public class BorrowFragment extends Fragment {
     private TabLayout tabs;
     private Sub1BorrowFragment sub1BorrowFragment;
     private Sub2BorrowFragment sub2BorrowFragment;
+    private Sub3BorrowFragment sub3BorrowFragment;//書籤
 
     public BorrowFragment(){
 
@@ -44,12 +45,14 @@ public class BorrowFragment extends Fragment {
         tabs = (TabLayout)getView().findViewById(R.id.tabs);
         tabs.addTab(tabs.newTab().setText("Borrow"));
         tabs.addTab(tabs.newTab().setText("Borrowed"));
+        tabs.addTab(tabs.newTab().setText("Tags"));
         tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 sub1BorrowFragment = (Sub1BorrowFragment)getFragmentManager().findFragmentByTag("sub1BorrowFragment");
                 sub2BorrowFragment = (Sub2BorrowFragment)getFragmentManager().findFragmentByTag("sub2BorrowFragment");
+                sub3BorrowFragment = (Sub3BorrowFragment)getFragmentManager().findFragmentByTag("sub3BorrowFragment");
                 switch(tab.getPosition()){
                     case 0:
                         if(sub1BorrowFragment == null){
@@ -63,6 +66,11 @@ public class BorrowFragment extends Fragment {
                             ft.setCustomAnimations(R.anim.fade_in,R.anim.fade_out).replace(R.id.borrowSubPageContainer,sub2BorrowFragment,"sub2BorrowFragment");
                         }
                         break;
+                    case 2:
+                        if(sub3BorrowFragment == null){
+                            sub3BorrowFragment = new Sub3BorrowFragment();
+                            ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.borrowSubPageContainer,sub3BorrowFragment,"sub3BorrowFragment");
+                        }
                 }
                 ft.commit();
             }
@@ -89,6 +97,9 @@ public class BorrowFragment extends Fragment {
         }
         if(sub2BorrowFragment != null){
             getFragmentManager().beginTransaction().remove(sub2BorrowFragment).commit();
+        }
+        if(sub3BorrowFragment != null){
+            getFragmentManager().beginTransaction().remove(sub3BorrowFragment).commit();
         }
     }
 

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.SignInButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.ramotion.foldingcell.FoldingCell;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +28,14 @@ public class SettingsFragment extends Fragment{
     private List<AccountUnit> account_list = new ArrayList<>();
     private LinearLayoutManager linearLayoutManager;
     private RecyclerView account_recyclerView;
+    private FoldingCell f1,f2,f3;
+    private AccountListAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
+
         account_list.add(new AccountUnit(null,null,"國立台北大學圖書館"));
         account_list.add(new AccountUnit(null,null,"新北市立圖書館"));
         account_list.add(new AccountUnit(null,null,"台北市立圖書館"));
@@ -42,10 +46,8 @@ public class SettingsFragment extends Fragment{
         linearLayoutManager = new LinearLayoutManager(getActivity());
         account_recyclerView.setLayoutManager(linearLayoutManager);
 
-        AccountListAdapter adapter = new AccountListAdapter(account_list);
+        adapter = new AccountListAdapter(account_list);
         account_recyclerView.setAdapter(adapter);
-
-
 
         Instance = this;
         // Inflate the layout for this fragment
@@ -55,8 +57,6 @@ public class SettingsFragment extends Fragment{
     @Override
     public void onStart(){
         super.onStart();
-
-
 
         // 用戶名稱 TextView
         userNameText = getView().findViewById(R.id.username_text);
@@ -109,7 +109,7 @@ public class SettingsFragment extends Fragment{
         });*/
 
 
-        //UpdateUI(FirebaseAuth.getInstance().getCurrentUser() != null);
+        UpdateUI(FirebaseAuth.getInstance().getCurrentUser() != null);
     }
 
     @Override
@@ -135,30 +135,27 @@ public class SettingsFragment extends Fragment{
                 btn.setEnabled(false);
             }*/
         }
-        /*UpdateAccount(AccountManager.TAIPEI_LIB_KEY);
+        UpdateAccount(AccountManager.TAIPEI_LIB_KEY);
         UpdateAccount(AccountManager.NEWTAIPEI_LIB_KEY);
-        UpdateAccount(AccountManager.NTPU_LIB_KEY);*/
+        UpdateAccount(AccountManager.NTPU_LIB_KEY);
     }
 
     // 更新帳號按鈕文字
-    /*public void UpdateAccount(String lib){
+    public void UpdateAccount(String lib){
         String account = AccountManager.Instance.GetLibraryAccount(lib);
         switch (lib) {
             case AccountManager.TAIPEI_LIB_KEY:
-                ((EditText)getView().findViewById(R.id.tcl_account_edit)).setText("");
-                ((EditText)getView().findViewById(R.id.tcl_password_edit)).setText("");
-                libraryBtn[0].setText("臺北市立圖書館\n"+(account==null?"未登入":"帳號 : "+account));
+                account_list.get(2).setAccount(account==null?"未登入":"帳號 : "+account);
+                adapter.notifyDataSetChanged();
                 break;
             case AccountManager.NEWTAIPEI_LIB_KEY:
-                ((EditText)getView().findViewById(R.id.ntcl_account_edit)).setText("");
-                ((EditText)getView().findViewById(R.id.ntcl_password_edit)).setText("");
-                libraryBtn[1].setText("新北市立圖書館\n"+(account==null?"未登入":"帳號 : "+account));
+                account_list.get(1).setAccount(account==null?"未登入":"帳號 : "+account);
+                adapter.notifyDataSetChanged();
                 break;
             case AccountManager.NTPU_LIB_KEY:
-                ((EditText)getView().findViewById(R.id.ntpul_account_edit)).setText("");
-                ((EditText)getView().findViewById(R.id.ntpul_password_edit)).setText("");
-                libraryBtn[2].setText("臺北大學圖書館\n"+(account==null?"未登入":"帳號 : "+account));
+                account_list.get(0).setAccount(account==null?"未登入":"帳號 : "+account);
+                adapter.notifyDataSetChanged();
                 break;
         }
-    }*/
+    }
 }

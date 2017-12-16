@@ -96,6 +96,8 @@ public class CollectionSearchResultAdapter extends RecyclerView.Adapter<Collecti
     }
 
 
+
+
     @Override
     public long getItemId(int position) {
         return position;

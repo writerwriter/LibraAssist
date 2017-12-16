@@ -8,7 +8,7 @@
     <it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow
         android:id="@+id/coverFlow"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:coverHeight="150dp"
         app:coverWidth="120dp"
         app:maxScaleFactor="1.5"
@@ -17,17 +17,18 @@
         app:scalingThreshold="0.5"
         app:spacing="0.6"
         app:reflectionOpacity="50"
-        app:verticalPaddingTop="-150dp"
+        app:verticalPaddingTop="50dp"
 
         />
     <TextSwitcher
         android:id="@+id/title"
-        android:paddingBottom="16dp"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="-50dp"
         android:layout_centerVertical="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:measureAllChildren="false"
+        android:animateLayoutChanges="true"
         />
 
 </RelativeLayout>

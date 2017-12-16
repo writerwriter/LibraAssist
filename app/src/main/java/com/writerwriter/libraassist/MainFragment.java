@@ -80,8 +80,8 @@ public class MainFragment extends Fragment {
             mTitle = getView().findViewById(R.id.title);
             mTitle.setFactory(mFactory);
         }
-        Animation in = AnimationUtils.loadAnimation(getActivity(),R.anim.fade_in);
-        Animation out = AnimationUtils.loadAnimation(getActivity(),R.anim.fade_out);
+        Animation in = AnimationUtils.loadAnimation(getActivity(),R.anim.slide_in_top);
+        Animation out = AnimationUtils.loadAnimation(getActivity(),R.anim.slide_out_bottom);
         mTitle.setInAnimation(in);
         mTitle.setOutAnimation(out);
 

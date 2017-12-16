@@ -35,7 +35,7 @@ import java.util.jar.Manifest;
 
 public class MainActivity extends AppCompatActivity {
 
-    BottomNavigationViewEx bottomNavigationView;
+    public static BottomNavigationViewEx bottomNavigationView;
 
     //private NonSwipeableViewPager viewPager;
 
@@ -305,4 +305,5 @@ public class MainActivity extends AppCompatActivity {
             AccountManager.Instance.AuthenticateWithFirebase(data);
         }
     }
+
 }

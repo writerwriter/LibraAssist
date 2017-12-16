@@ -19,6 +19,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -27,6 +31,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -37,6 +42,11 @@ import java.util.Map;
 
 
 public class CollectionFragment extends Fragment {
+    BottomNavigationViewEx bottomNavigationViewEx = MainActivity.bottomNavigationView;
+
+    Animation hide;
+    Animation appear;
+
     private static final String LOG_FLAG = "---Collect Fragment---";
 
     private static final String SEARCH_KEY       = "search";
@@ -135,7 +145,9 @@ public class CollectionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_collection, container, false);
+        View v = inflater.inflate(R.layout.fragment_collection, container, false);
+        collectionSearchResults = v.findViewById(R.id.colleciton_recyclerview);
+        return v;
     }
 
     @Override
@@ -155,10 +167,12 @@ public class CollectionFragment extends Fragment {
         menu.clear();
         getActivity().getMenuInflater().inflate(R.menu.menu_main, menu);
         MenuItem item = menu.findItem(R.id.search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                searchView.clearFocus();
+
                 if (query.equals("")){
                     return true;
                 }
@@ -218,7 +232,6 @@ public class CollectionFragment extends Fragment {
         // 新增至清單內
         collectionSearchResultUnits.clear();
         collectionSearchResultUnits.addAll(searchResult.values());
-        collectionSearchResults = getView().findViewById(R.id.colleciton_recyclerview);
         collectionSearchResults.setHasFixedSize(true);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         collectionSearchResults.setLayoutManager(linearLayoutManager);
@@ -226,6 +239,54 @@ public class CollectionFragment extends Fragment {
         collectionSearchResultAdapter.setHasStableIds(true);
         collectionSearchResultAdapter.notifyDataSetChanged();
         collectionSearchResults.setAdapter(collectionSearchResultAdapter);
+
+        /*hide = AnimationUtils.loadAnimation(getContext(),R.anim.slide_out_bottom);
+        appear = AnimationUtils.loadAnimation(getContext(),R.anim.slide_in_top);
+        collectionSearchResults.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if(dy>0){
+                    bottomNavigationViewEx.startAnimation(hide);
+                    hide.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            bottomNavigationViewEx.setVisibility(View.INVISIBLE);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                }
+                else if(dy<0){
+                    bottomNavigationViewEx.startAnimation(appear);
+                    appear.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            bottomNavigationViewEx.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                }
+            }
+        });*/
+
         Log.d(LOG_FLAG, "Show BookList Num:"+searchResult.size());
         Xinpei_url = 999999;
         ntpu_url = 999999;
