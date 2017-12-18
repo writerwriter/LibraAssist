@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/LibraAssist.iml" filepath="$PROJECT_DIR$/LibraAssist.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/folding-cell-1.2.1/folding-cell-1.2.1.iml" filepath="$PROJECT_DIR$/folding-cell-1.2.1/folding-cell-1.2.1.iml" />
     </modules>
   </component>
 </project>
