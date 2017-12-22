@@ -32,6 +32,8 @@ public class LibraryInfoFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_library_info, container, false);
 
+        library_infos.clear();
+
         library_infos.add(new Library_info(R.drawable.ic_library_img1,"台北大學圖書館",R.drawable.ic_arrow_right_black_24px));
         library_infos.add(new Library_info(R.drawable.ic_library_img1,"新北市立圖書館",R.drawable.ic_arrow_right_black_24px));
         library_infos.add(new Library_info(R.drawable.ic_library_img1,"台北市立圖書館",R.drawable.ic_arrow_right_black_24px));

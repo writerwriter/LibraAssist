@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,10 +7,122 @@
     <!-- TODO: Update blank fragment layout -->
 
     <TextView
+        android:id="@+id/hotkey_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:focusable="false"
+        android:gravity="center_horizontal"
+        android:text="熱門關鍵字:"
+        android:textSize="20sp"/>
+    <TextView
+        android:id="@+id/hotkey_0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:clickable="true"
-        android:focusable="true" />
+        android:focusable="true"
+        android:gravity="center_horizontal"
+        android:textSize="20sp"
+        android:layout_below="@id/hotkey_title"/>
+    <TextView
+        android:id="@+id/hotkey_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_horizontal"
+        android:textSize="20sp"
+        android:layout_below="@id/hotkey_0"/>
+    <TextView
+        android:id="@+id/hotkey_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_horizontal"
+        android:textSize="20sp"
+        android:layout_below="@id/hotkey_1"/>
+    <TextView
+        android:id="@+id/hotkey_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_horizontal"
+        android:textSize="20sp"
+        android:layout_below="@id/hotkey_2"/>
+    <TextView
+        android:id="@+id/hotkey_4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_horizontal"
+        android:textSize="20sp"
+        android:layout_below="@id/hotkey_3"/>
+    <TextView
+        android:id="@+id/hotkey_5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_horizontal"
+        android:textSize="20sp"
+        android:layout_below="@id/hotkey_4"/>
+    <TextView
+        android:id="@+id/hotkey_6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_horizontal"
+        android:textSize="20sp"
+        android:layout_below="@id/hotkey_5"/>
+    <TextView
+        android:id="@+id/hotkey_7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_horizontal"
+        android:textSize="20sp"
+        android:layout_below="@id/hotkey_6"/>
+    <TextView
+        android:id="@+id/hotkey_8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_horizontal"
+        android:textSize="20sp"
+        android:layout_below="@id/hotkey_7"/>
+    <TextView
+        android:id="@+id/hotkey_9"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_horizontal"
+        android:textSize="20sp"
+        android:layout_below="@id/hotkey_8"/>
+    <TextView
+        android:id="@+id/hotkey_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_horizontal"
+        android:textSize="20sp"
+        android:layout_below="@id/hotkey_9"/>
+    <TextView
+        android:id="@+id/hotkey_11"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_horizontal"
+        android:textSize="20sp"
+        android:layout_below="@id/hotkey_10"/>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -25,4 +137,4 @@
 
     </FrameLayout>
 
-</FrameLayout>
+</RelativeLayout>

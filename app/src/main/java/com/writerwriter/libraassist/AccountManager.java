@@ -254,6 +254,7 @@ public class AccountManager {
             Map<String, Object> users = new HashMap<String, Object>();
             users.put(ACCOUNT_DATABASE_KEY+"/"+lib+"/account", account);
             users.put(ACCOUNT_DATABASE_KEY+"/"+lib+"/password", password);
+            users.put(ACCOUNT_DATABASE_KEY+"/"+lib+"/key", "go");
             //libraryAccount.put(lib, account);
             ref.updateChildren(users);
             Toast.makeText(mActivity.getApplicationContext(), "Account update success: Update account & passwd.", Toast.LENGTH_SHORT).show();

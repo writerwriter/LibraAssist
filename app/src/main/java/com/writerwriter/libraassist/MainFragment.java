@@ -4,6 +4,9 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -97,8 +100,27 @@ public class MainFragment extends Fragment {
         coverFlow.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-                if(newBooksList.size() > position)
-                Toast.makeText(getActivity(), newBooksList.get(position).getDetail(), Toast.LENGTH_SHORT).show();
+                if(newBooksList.size() > position) {
+                    if(newBooksList.get(position).getSearchState().equals("true")){
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                        CollectionBookDetailFragment collectionBookDetailFragment = (CollectionBookDetailFragment)fragmentManager.findFragmentByTag("CollectionBookDetailFragment");
+
+                        if(collectionBookDetailFragment == null){
+                            collectionBookDetailFragment = new CollectionBookDetailFragment();
+                            collectionBookDetailFragment.setCollectionSearchResultUnit(newBooksList.get(position));
+                            fragmentTransaction.setCustomAnimations(R.anim.slide_frag_in_right, R.anim.slide_frag_out_right, R.anim.slide_frag_in_right, R.anim.slide_frag_out_right);
+                            fragmentTransaction.add(R.id.load_fragment,collectionBookDetailFragment, "CollectionBookDetailFragment");
+                            fragmentTransaction.addToBackStack("CollectionBookDetailFragment");
+                            fragmentTransaction.commit();
+                        }
+                    }
+                    //loading中
+                    else{
+                        Toast.makeText(getActivity(), newBooksList.get(position).getDetail(), Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
 

@@ -6,6 +6,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -86,10 +89,30 @@ public class CollectionSearchResultAdapter extends RecyclerView.Adapter<Collecti
         if (mOnItemClickListener != null){
             mOnItemClickListener.onItemClick(view,(int)view.getTag());
         }
-        // 暫時顯示詳細資訊
-        Toast.makeText(view.getContext(),
-                collectionSearchResults.get((int)view.getTag()).getDetail(),
-                Toast.LENGTH_LONG).show();
+        //資料出來後
+        if(collectionSearchResults.get((int)view.getTag()).getSearchState().equals("true")){
+            FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            CollectionBookDetailFragment collectionBookDetailFragment = (CollectionBookDetailFragment)fragmentManager.findFragmentByTag("CollectionBookDetailFragment");
+
+            if(collectionBookDetailFragment == null){
+                collectionBookDetailFragment = new CollectionBookDetailFragment();
+                collectionBookDetailFragment.setCollectionSearchResultUnit(collectionSearchResults.get((int)view.getTag()));
+                fragmentTransaction.setCustomAnimations(R.anim.slide_frag_in_right, R.anim.slide_frag_out_right, R.anim.slide_frag_in_right, R.anim.slide_frag_out_right);
+                fragmentTransaction.add(R.id.load_fragment,collectionBookDetailFragment, "CollectionBookDetailFragment");
+                fragmentTransaction.addToBackStack("CollectionBookDetailFragment");
+                fragmentTransaction.commit();
+            }
+        }
+        //loading中
+        else{
+            // 暫時顯示詳細資訊
+            Toast.makeText(view.getContext(),
+                    collectionSearchResults.get((int)view.getTag()).getDetail(),
+                    Toast.LENGTH_LONG).show();
+        }
+
     }
     public void setmOnItemClickListener(OnItemClickListener listener){
         this.mOnItemClickListener = listener;

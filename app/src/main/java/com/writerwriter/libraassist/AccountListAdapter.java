@@ -72,7 +72,7 @@ public class AccountListAdapter extends RecyclerView.Adapter<AccountListAdapter.
             @Override
             public void onClick(View view) {
                 switch(accountUnit.getLibraryName()){
-                    case "國立台北大學圖書館":
+                       case "國立台北大學圖書館":
                         AccountManager.Instance.UpdateLibaccount(AccountManager.NTPU_LIB_KEY,
                                 holder.enter_account.getText().toString(),
                                 holder.enter_password.getText().toString());

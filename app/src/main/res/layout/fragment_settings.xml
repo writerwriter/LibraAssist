@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     xmlns:folding-cell="http://schemas.android.com/apk/res-auto"
     android:background="#fcecc9"
-    tools:context="com.writerwriter.libraassist.SettingsFragment">
+    tools:context="com.writerwriter.libraassist.SettingsFragment"
+    android:clickable="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -49,93 +50,6 @@
                 android:layout_toLeftOf="@id/google_signin_button"
                 android:visibility="visible" />
         </LinearLayout>
-<!--
-        <LinearLayout
-            android:id="@+id/account_list"
-            android:layout_width="match_parent"
-            android:layout_height="520dp"
-            android:orientation="vertical"
-            android:scrollbars="vertical"
-            android:weightSum="1">
-
-            <Button
-                android:id="@+id/tcl_account_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:text="臺北市立圖書館\n未登入"
-                android:textSize="20sp"
-                android:textAllCaps="false" />
-
-            <EditText
-                android:id="@+id/tcl_account_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="account" />
-
-            <EditText
-                android:id="@+id/tcl_password_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="password" />
-
-            <Button
-                android:id="@+id/ntcl_account_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:text="新北市立圖書館\n未登入"
-                android:textAllCaps="false"
-                android:textSize="20sp" />
-
-            <EditText
-                android:id="@+id/ntcl_account_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="account" />
-
-            <EditText
-                android:id="@+id/ntcl_password_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="password" />
-
-            <Button
-                android:id="@+id/ntpul_account_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:defaultFocusHighlightEnabled="false"
-                android:enabled="false"
-                android:text="臺北大學圖書館\n未登入"
-                android:textAllCaps="false"
-                android:textSize="20sp" />
-
-            <EditText
-                android:id="@+id/ntpul_account_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="account" />
-
-            <EditText
-                android:id="@+id/ntpul_password_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="password" />
-
-        </LinearLayout>
-        -->
         <android.support.v7.widget.RecyclerView
             android:id="@+id/account_recyclerlist"
             android:layout_width="match_parent"

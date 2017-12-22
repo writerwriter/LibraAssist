@@ -19,7 +19,7 @@
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_settings"
-        android:icon="@drawable/ic_settings"
+        android:icon="@drawable/ic_profile"
         android:title="settings"
         android:orderInCategory="200"
         app:showAsAction="ifRoom" />

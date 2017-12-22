@@ -28,7 +28,6 @@ public class SettingsFragment extends Fragment{
     private List<AccountUnit> account_list = new ArrayList<>();
     private LinearLayoutManager linearLayoutManager;
     private RecyclerView account_recyclerView;
-    private FoldingCell f1,f2,f3;
     private AccountListAdapter adapter;
 
     @Override
@@ -146,16 +145,15 @@ public class SettingsFragment extends Fragment{
         switch (lib) {
             case AccountManager.TAIPEI_LIB_KEY:
                 account_list.get(2).setAccount(account==null?"未登入":"帳號 : "+account);
-                adapter.notifyDataSetChanged();
                 break;
             case AccountManager.NEWTAIPEI_LIB_KEY:
                 account_list.get(1).setAccount(account==null?"未登入":"帳號 : "+account);
-                adapter.notifyDataSetChanged();
                 break;
             case AccountManager.NTPU_LIB_KEY:
                 account_list.get(0).setAccount(account==null?"未登入":"帳號 : "+account);
-                adapter.notifyDataSetChanged();
                 break;
         }
+        adapter = new AccountListAdapter(account_list);
+        account_recyclerView.setAdapter(adapter);
     }
 }

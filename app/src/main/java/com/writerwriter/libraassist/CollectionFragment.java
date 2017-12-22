@@ -23,7 +23,9 @@ import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
@@ -32,6 +34,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.victor.loading.book.BookLoading;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -39,6 +42,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Delayed;
 
 
 public class CollectionFragment extends Fragment {
@@ -77,6 +81,12 @@ public class CollectionFragment extends Fragment {
     private List<CollectionSearchResultUnit> collectionSearchResultUnits = new ArrayList<>();
     private RecyclerView collectionSearchResults;
     private LinearLayoutManager linearLayoutManager;
+    private String[] tokens;
+    private List<TextView> textViews = new ArrayList<>();
+    private TextView hotkey_title;
+    private SearchView searchView;
+    MenuItem item;
+    private BookLoading bookLoadingAnimation;
 
     public CollectionFragment(){
         mSearchEventListener = new ChildEventListener() {
@@ -126,11 +136,27 @@ public class CollectionFragment extends Fragment {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
                 if (dataSnapshot.getKey().equals("result")){
-                    /*HashMap<String, String> data = (HashMap<String, String>)dataSnapshot.getValue();
+                    HashMap<String, String> data = (HashMap<String, String>)dataSnapshot.getValue();
                     hotkey.addAll(data.values());
                     // 暫時顯示熱門關鍵字
                     Toast.makeText(getContext(), hotkey.toString(), Toast.LENGTH_SHORT).show();
-                    Log.d(LOG_FLAG, "Got Hotkey List. Num :"+hotkey.size());*/
+
+                    for(int i=0;i<hotkey.size();i++){
+                        textViews.get(i).setText(hotkey.get(i));
+                        textViews.get(i).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                MenuItemCompat.expandActionView(item);
+                                searchView.setQuery(((TextView)view).getText().toString(),false);
+                                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                if (imm != null) {
+                                    imm.showSoftInput(view, 0);
+                                }
+                            }
+                        });
+                    }
+
+                    Log.d(LOG_FLAG, "Got Hotkey List. Num :"+hotkey.size());
                     hotkeyRef.removeEventListener(mHotkeyEventListener);
                 }
             }
@@ -147,6 +173,40 @@ public class CollectionFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_collection, container, false);
         collectionSearchResults = v.findViewById(R.id.colleciton_recyclerview);
+
+        hotkey_title = (TextView)v.findViewById(R.id.hotkey_title);
+
+        textViews.add((TextView) v.findViewById(R.id.hotkey_0));
+        textViews.add((TextView) v.findViewById(R.id.hotkey_1));
+        textViews.add((TextView) v.findViewById(R.id.hotkey_2));
+        textViews.add((TextView) v.findViewById(R.id.hotkey_3));
+        textViews.add((TextView) v.findViewById(R.id.hotkey_4));
+        textViews.add((TextView) v.findViewById(R.id.hotkey_5));
+        textViews.add((TextView) v.findViewById(R.id.hotkey_6));
+        textViews.add((TextView) v.findViewById(R.id.hotkey_7));
+        textViews.add((TextView) v.findViewById(R.id.hotkey_8));
+        textViews.add((TextView) v.findViewById(R.id.hotkey_9));
+        textViews.add((TextView) v.findViewById(R.id.hotkey_10));
+        textViews.add((TextView) v.findViewById(R.id.hotkey_11));
+
+        bookLoadingAnimation = (BookLoading)getActivity().findViewById(R.id.book_loading_animation);
+        bookLoadingAnimation.setVisibility(View.GONE);
+
+        for(int i=0;i<hotkey.size();i++){
+            textViews.get(i).setText(hotkey.get(i));
+            textViews.get(i).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    MenuItemCompat.expandActionView(item);
+                    searchView.setQuery(((TextView)view).getText().toString(),false);
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        imm.showSoftInput(view, 0);
+                    }
+                }
+            });
+        }
+
         return v;
     }
 
@@ -166,12 +226,22 @@ public class CollectionFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
         getActivity().getMenuInflater().inflate(R.menu.menu_main, menu);
-        MenuItem item = menu.findItem(R.id.search);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        item = menu.findItem(R.id.search);
+        searchView = (SearchView) MenuItemCompat.getActionView(item);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+
                 searchView.clearFocus();
+
+                bookLoadingAnimation.setVisibility(View.VISIBLE);
+                bookLoadingAnimation.start();
+
+
+                hotkey_title.setVisibility(View.GONE);
+                for(int i =0;i<textViews.size();i++){
+                    textViews.get(i).setVisibility(View.GONE);
+                }
 
                 if (query.equals("")){
                     return true;
@@ -229,6 +299,8 @@ public class CollectionFragment extends Fragment {
     }
 
     public void ShowBookList() {
+        bookLoadingAnimation.stop();
+        bookLoadingAnimation.setVisibility(View.GONE);
         // 新增至清單內
         collectionSearchResultUnits.clear();
         collectionSearchResultUnits.addAll(searchResult.values());

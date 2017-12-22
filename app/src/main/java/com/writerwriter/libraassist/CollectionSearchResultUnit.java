@@ -62,6 +62,26 @@ public class CollectionSearchResultUnit {
 
     public String getLink() { return link; }
 
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public String getPublish_year() {
+        return publish_year;
+    }
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public String getStorage() {
+        return storage;
+    }
+
     public String getDetail() {
         if (searchState.equals("true"))
             return   "書名         : "+title+"\n"
@@ -81,5 +101,9 @@ public class CollectionSearchResultUnit {
 
     public boolean isNull() {
         return searchState == "null";
+    }
+
+    public String getSearchState() {
+        return searchState;
     }
 }

@@ -58,8 +58,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        SettingsFragment settingsFragment = (SettingsFragment)getSupportFragmentManager().findFragmentByTag("settingsFragment");
-        if(settingsFragment !=null){
+        FragmentManager fm = getSupportFragmentManager();
+        fm.executePendingTransactions();
+        //SettingsFragment settingsFragment = (SettingsFragment)getSupportFragmentManager().findFragmentByTag("settingsFragment");
+        if(fm.getBackStackEntryCount()==0){
             toolbar.setNavigationIcon(mBack);
             mBack.start();
         }
@@ -113,7 +115,9 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fragmentManager.popBackStack();
+                if(toolbar.getNavigationIcon() == mMenu){
+                    fragmentManager.popBackStack();
+                }
                 if(fragmentManager.findFragmentByTag("notificationFragment")!=null && fragmentManager.findFragmentByTag("settingsFragment")==null || fragmentManager.findFragmentByTag("notificationFragment")==null && fragmentManager.findFragmentByTag("settingsFragment")!=null){
                     toolbar.setNavigationIcon(mBack);
                     mBack.start();
@@ -304,6 +308,15 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == AccountManager.RC_SIGN_IN) {
             AccountManager.Instance.AuthenticateWithFirebase(data);
         }
+    }
+
+    public void toolbarAnimationStart(){
+        toolbar.setNavigationIcon(mBack);
+        mBack.start();
+    }
+    public void toolbarAnimationEnd(){
+        toolbar.setNavigationIcon(mMenu);
+        mMenu.start();
     }
 
 }
