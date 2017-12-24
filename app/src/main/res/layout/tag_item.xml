@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.daimajia.swipe.SwipeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tag_item"
+    android:layout_width="match_parent"
+    android:layout_height="80dp">
+
+    <LinearLayout
+        android:background="#66ddff00"
+        android:id="@+id/bottom_wrapper"
+        android:layout_width="120dp"
+        android:weightSum="1"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/remove_btn"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:text="Remove"
+            android:background="#FF0000"/>
+        <Button
+            android:id="@+id/edit_btn"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:text="Edit"
+            android:background="#FFFF00"/>
+
+    </LinearLayout>
+    <RelativeLayout
+        android:padding="10dp"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tag_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start" />
+        <TextView
+            android:id="@+id/tag_pages"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:layout_alignParentEnd="true"/>
+
+    </RelativeLayout>
+
+
+</com.daimajia.swipe.SwipeLayout>
+

@@ -24,4 +24,39 @@
         android:src="@drawable/ic_action_add"
         />
 
+    <ListView
+        android:id="@+id/tag_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </ListView>
+
+    <LinearLayout
+        android:id="@+id/custom_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enter your tag name:"/>
+        <EditText
+            android:id="@+id/enter_tag_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="tag name"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enter pages:"/>
+        <EditText
+            android:id="@+id/enter_tag_pages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="pages"/>
+
+    </LinearLayout>
+
 </RelativeLayout>

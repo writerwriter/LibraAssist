@@ -42,6 +42,7 @@ dependencies {
     implementation project(':folding-cell-1.2.1')
     compile 'com.victor:lib:1.0.4'
     compile 'com.afollestad.material-dialogs:core:0.9.6.0'
+    compile "com.daimajia.swipelayout:library:1.2.0@aar"
 }
 
 
