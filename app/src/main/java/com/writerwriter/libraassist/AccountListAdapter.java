@@ -53,18 +53,18 @@ public class AccountListAdapter extends RecyclerView.Adapter<AccountListAdapter.
         Context context = parent.getContext();
         View account_list_view = LayoutInflater.from(context).inflate(R.layout.account_list_card,parent,false);
         ViewHolder viewHolder = new ViewHolder(account_list_view);
-        account_list_view.setOnClickListener(new View.OnClickListener() {
+        /*account_list_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final FoldingCell fc = (FoldingCell) view.findViewById(R.id.account_cardview);
                 fc.toggle(false);
             }
-        });
+        });*/
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final AccountUnit accountUnit = accountList.get(position);
         holder.libraryName.setText(accountUnit.getLibraryName());
         holder.account.setText(accountUnit.getAccount());
@@ -105,6 +105,15 @@ public class AccountListAdapter extends RecyclerView.Adapter<AccountListAdapter.
             holder.log_in.setEnabled(false);
         }
         holder.itemView.setTag(position);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(accountList.get(position).getState() != AccountUnit.PENDING) {
+                    final FoldingCell fc = (FoldingCell) view.findViewById(R.id.account_cardview);
+                    fc.toggle(false);
+                }
+            }
+        });
 
     }
 

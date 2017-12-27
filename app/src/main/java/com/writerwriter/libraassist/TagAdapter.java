@@ -53,7 +53,7 @@ public class TagAdapter extends BaseSwipeAdapter{
         t.setText(list.get(position).getTag_text());
         TextView t2 = (TextView)convertView.findViewById(R.id.tag_pages);
         t2.setText(list.get(position).getTag_pages());
-        SwipeLayout swipeLayout = (SwipeLayout)convertView.findViewById(getSwipeLayoutResourceId(position));
+        final SwipeLayout swipeLayout = (SwipeLayout)convertView.findViewById(getSwipeLayoutResourceId(position));
         swipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
         swipeLayout.addDrag(SwipeLayout.DragEdge.Left, convertView.findViewById(R.id.bottom_wrapper));
         Button remove_btn = (Button)convertView.findViewById(R.id.remove_btn);
@@ -64,6 +64,7 @@ public class TagAdapter extends BaseSwipeAdapter{
                 //list.remove(position);
                 //notifyDataSetChanged();
                 Sub3BorrowFragment.Instance.UpdateBookmark(list.get(position).getTag_text(), "");
+                swipeLayout.close();
             }
         });
         edit_btn.setOnClickListener(new View.OnClickListener() {

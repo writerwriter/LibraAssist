@@ -35,17 +35,18 @@ public class BorrowFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_borrow, container, false);
+        View v = inflater.inflate(R.layout.fragment_borrow, container, false);
+        tabs = (TabLayout)v.findViewById(R.id.tabs);
+        tabs.addTab(tabs.newTab().setText("Borrow"));
+        tabs.addTab(tabs.newTab().setText("Borrowed"));
+        tabs.addTab(tabs.newTab().setText("Tags"));
+        return v;
     }
 
     @Override
     public void onStart() {
         super.onStart();
 
-        tabs = (TabLayout)getView().findViewById(R.id.tabs);
-        tabs.addTab(tabs.newTab().setText("Borrow"));
-        tabs.addTab(tabs.newTab().setText("Borrowed"));
-        tabs.addTab(tabs.newTab().setText("Tags"));
         tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

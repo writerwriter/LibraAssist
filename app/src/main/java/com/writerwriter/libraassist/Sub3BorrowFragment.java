@@ -120,17 +120,19 @@ public class Sub3BorrowFragment extends Fragment{
                                             Toast.makeText(getContext(),"The page is empty.",Toast.LENGTH_SHORT).show();
                                             break;
                                         }
+                                        boolean check = true;
                                         for (int i=0; i<list.size(); i++){
                                             if(list.get(i).getTag_text().equals(e1.getText().toString())){
                                                 Toast.makeText(getContext(),"Bookmark is already exist.",Toast.LENGTH_SHORT).show();
+                                                check = false;
                                                 break;
                                             }
-                                            else if(i == list.size()-1){
-                                                Toast.makeText(getContext(),"test1",Toast.LENGTH_SHORT).show();
-                                                //list.add(new TagUnit(e1.getText().toString(),e2.getText().toString()));
-                                                //adapter.notifyDataSetChanged();
-                                                UpdateBookmark(e1.getText().toString(), e2.getText().toString());
-                                            }
+                                        }
+                                        if(check){
+                                            Toast.makeText(getContext(),"test1",Toast.LENGTH_SHORT).show();
+                                            //list.add(new TagUnit(e1.getText().toString(),e2.getText().toString()));
+                                            //adapter.notifyDataSetChanged();
+                                            UpdateBookmark(e1.getText().toString(), e2.getText().toString());
                                         }
                                         break;
                                     case NEGATIVE:
