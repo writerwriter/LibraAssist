@@ -139,9 +139,9 @@ public class CollectionFragment extends Fragment {
                     HashMap<String, String> data = (HashMap<String, String>)dataSnapshot.getValue();
                     hotkey.addAll(data.values());
                     // 暫時顯示熱門關鍵字
-                    Toast.makeText(getContext(), hotkey.toString(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), hotkey.toString(), Toast.LENGTH_SHORT).show();
 
-                    for(int i=0;i<hotkey.size();i++){
+                    for(int i=0;i<hotkey.size()&&i<textViews.size();i++){
                         textViews.get(i).setText(hotkey.get(i));
                         textViews.get(i).setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -192,7 +192,7 @@ public class CollectionFragment extends Fragment {
         bookLoadingAnimation = (BookLoading)getActivity().findViewById(R.id.book_loading_animation);
         bookLoadingAnimation.setVisibility(View.GONE);
 
-        for(int i=0;i<hotkey.size();i++){
+        for(int i=0;i<hotkey.size()&&i<textViews.size();i++){
             textViews.get(i).setText(hotkey.get(i));
             textViews.get(i).setOnClickListener(new View.OnClickListener() {
                 @Override

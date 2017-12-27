@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,18 +23,73 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.daimajia.swipe.SimpleSwipeListener;
 import com.daimajia.swipe.SwipeLayout;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class Sub3BorrowFragment extends Fragment{
+    public static Sub3BorrowFragment Instance;
+    private static final String LOG_FLAG = "BookmarkFragment";
+    private static final String BOOK_MARK_KEY = "book_mark";
+
+    private static DatabaseReference bookmarkRef;
+    private ChildEventListener bookmarkEventListener;
 
     private FloatingActionButton add_tag_btn;
     private List<TagUnit> list = new ArrayList<>();
     private TagAdapter adapter;
+    //private HashMap<String, String> bookmark = new HashMap<>();
+
     public Sub3BorrowFragment() {
-        // Required empty public constructor
-    }
+        Instance = this;
+
+        bookmarkRef = AccountManager.Instance.GetUserDatabaseRef(BOOK_MARK_KEY);
+        bookmarkEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+            //Log.d(LOG_FLAG, "DataAdd    "+dataSnapshot.getKey()+" "+dataSnapshot.getValue());
+            list.add(new TagUnit(dataSnapshot.getKey(), (String)dataSnapshot.getValue()));
+            adapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
+            //Log.d(LOG_FLAG, "DataChange "+dataSnapshot.getKey()+" "+dataSnapshot.getValue());
+            for (int i=0; i<list.size(); i++){
+                if(list.get(i).getTag_text().equals(dataSnapshot.getKey())){
+                    list.get(i).setTag_pages((String)dataSnapshot.getValue());
+                    adapter.notifyDataSetChanged();
+                    break;
+                }
+            }
+        }
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+            //Log.d(LOG_FLAG, "DataRemove "+dataSnapshot.getKey()+" "+dataSnapshot.getValue());
+            for (int i=0; i<list.size(); i++){
+                if(list.get(i).getTag_text().equals(dataSnapshot.getKey())){
+                    list.remove(i);
+                    adapter.notifyDataSetChanged();
+                    break;
+                }
+            }
+        }
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {}
+    };
+}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,7 +99,7 @@ public class Sub3BorrowFragment extends Fragment{
         final EditText e1 = (EditText)v.findViewById(R.id.enter_tag_name);
         final EditText e2 = (EditText)v.findViewById(R.id.enter_tag_pages);
         customDialogView.setVisibility(View.GONE);
-        ListView listView = (ListView) v.findViewById(R.id.tag_list_view);
+        final ListView listView = (ListView) v.findViewById(R.id.tag_list_view);
         adapter = new TagAdapter(getContext(),list);
         listView.setAdapter(adapter);
         add_tag_btn = (FloatingActionButton) v.findViewById(R.id.add_tag_button);
@@ -60,9 +116,22 @@ public class Sub3BorrowFragment extends Fragment{
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 switch (which){
                                     case POSITIVE:
-                                        Toast.makeText(getContext(),"test1",Toast.LENGTH_SHORT).show();
-                                        list.add(new TagUnit(e1.getText().toString(),e2.getText().toString()));
-                                        adapter.notifyDataSetChanged();
+                                        if (e2.getText().toString().equals("")){
+                                            Toast.makeText(getContext(),"The page is empty.",Toast.LENGTH_SHORT).show();
+                                            break;
+                                        }
+                                        for (int i=0; i<list.size(); i++){
+                                            if(list.get(i).getTag_text().equals(e1.getText().toString())){
+                                                Toast.makeText(getContext(),"Bookmark is already exist.",Toast.LENGTH_SHORT).show();
+                                                break;
+                                            }
+                                            else if(i == list.size()-1){
+                                                Toast.makeText(getContext(),"test1",Toast.LENGTH_SHORT).show();
+                                                //list.add(new TagUnit(e1.getText().toString(),e2.getText().toString()));
+                                                //adapter.notifyDataSetChanged();
+                                                UpdateBookmark(e1.getText().toString(), e2.getText().toString());
+                                            }
+                                        }
                                         break;
                                     case NEGATIVE:
                                         Toast.makeText(getContext(),"test2",Toast.LENGTH_SHORT).show();
@@ -82,9 +151,25 @@ public class Sub3BorrowFragment extends Fragment{
             }
         });
 
-
+        bookmarkRef.addChildEventListener(bookmarkEventListener);
 
         return v;
     }
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        bookmarkRef.removeEventListener(bookmarkEventListener);
+    }
+
+    public void UpdateBookmark(String key, String value){
+        if (value.equals("")){
+            bookmarkRef.child(key).removeValue();
+        }
+        else{
+            Map<String, Object> data = new HashMap<>();
+            data.put(key, value);
+            bookmarkRef.updateChildren(data);
+        }
+    }
 }

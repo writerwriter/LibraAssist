@@ -72,7 +72,7 @@ public class AccountListAdapter extends RecyclerView.Adapter<AccountListAdapter.
             @Override
             public void onClick(View view) {
                 switch(accountUnit.getLibraryName()){
-                       case "國立台北大學圖書館":
+                    case "國立台北大學圖書館":
                         AccountManager.Instance.UpdateLibaccount(AccountManager.NTPU_LIB_KEY,
                                 holder.enter_account.getText().toString(),
                                 holder.enter_password.getText().toString());
@@ -91,6 +91,12 @@ public class AccountListAdapter extends RecyclerView.Adapter<AccountListAdapter.
 
             }
         });
+        if (accountUnit.getState() == AccountUnit.PENDING){
+            holder.account.setText("驗證帳號密碼中...");
+        }
+        else if(accountUnit.getState() == AccountUnit.ERROR){
+            holder.account.setText("帳號密碼驗證失敗");
+        }
 
         if(FirebaseAuth.getInstance().getCurrentUser() != null){
             holder.log_in.setEnabled(true);

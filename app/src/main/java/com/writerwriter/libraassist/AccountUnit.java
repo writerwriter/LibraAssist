@@ -5,9 +5,14 @@ package com.writerwriter.libraassist;
  */
 
 public class AccountUnit {
+    public static final int FINISH = 0;
+    public static final int PENDING = 1;
+    public static final int ERROR = 2;
+
     private String account;
     private String password;
     private String libraryName;
+    private int state;
 
     public AccountUnit() {
     }
@@ -16,6 +21,7 @@ public class AccountUnit {
         this.account = account;
         this.password = password;
         this.libraryName = libraryName;
+        this.state = FINISH;
     }
 
     public String getAccount() {
@@ -41,4 +47,8 @@ public class AccountUnit {
     public void setLibraryName(String libraryName) {
         this.libraryName = libraryName;
     }
+
+    public int getState() { return state; }
+
+    public void setState(int state) { if(state<3&&state>=0) this.state = state;  }
 }

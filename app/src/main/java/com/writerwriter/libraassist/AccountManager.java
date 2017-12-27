@@ -25,9 +25,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+
+import static java.nio.file.Paths.get;
 
 /**
  * Created by KKK on 2017/10/19.
@@ -43,6 +47,8 @@ public class AccountManager {
     public static final String NTPU_LIB_KEY = "ntpu_lib";
     private static final String USER_DATABASE_PATH = "user_data";
     private static final String ACCOUNT_DATABASE_KEY = "library_account";
+    private static final String PENDING_STATE = "pending";
+    private static final String ERROR_STATE = "Error";
 
     public FirebaseAuth mAuth;
 
@@ -52,7 +58,9 @@ public class AccountManager {
     public static DatabaseReference ref;
     private ChildEventListener mChildEventListener;
     private GoogleApiClient mGoogleApiClient;
+
     private HashMap<String, String> libraryAccount = new HashMap<>();
+    private HashMap<String, Integer> libraryState = new HashMap<>();
 
     public AccountManager(AppCompatActivity activity){
         mActivity = activity;
@@ -111,15 +119,25 @@ public class AccountManager {
                     Iterator<DataSnapshot> iter = dataSnapshot.getChildren().iterator();
                     while (iter.hasNext()) {
                         DataSnapshot iterSnapshot = iter.next();
-                        String account = ((HashMap<String, String>)iterSnapshot.getValue()).get("account").toString();
+                        HashMap<String, String> data = (HashMap<String, String>)iterSnapshot.getValue();
+                        String account = data.get("account");
+
                         libraryAccount.put(iterSnapshot.getKey(), account);
+                        libraryState.put(iterSnapshot.getKey(), AccountUnit.FINISH);
+                        if (data.containsKey("State")) {
+                            if (data.get("State").equals(PENDING_STATE)) {
+                                libraryState.put(iterSnapshot.getKey(), AccountUnit.PENDING);
+                            } else if (data.get("State").equals(ERROR_STATE)) {
+                                libraryState.put(iterSnapshot.getKey(), AccountUnit.ERROR);
+                            }
+                        }
                         if (SettingsFragment.Instance != null) {
                             SettingsFragment.Instance.UpdateAccount(iterSnapshot.getKey());
                         }
-                    }
                 }
             }
 
+        }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
                 //Log.d(LOG_FLAG, "DataChange "+dataSnapshot.getKey()+" "+dataSnapshot.getValue());
@@ -128,8 +146,17 @@ public class AccountManager {
                     Iterator<DataSnapshot> iter = dataSnapshot.getChildren().iterator();
                     while (iter.hasNext()) {
                         DataSnapshot iterSnapshot = iter.next();
-                        String account = ((HashMap<String, String>)iterSnapshot.getValue()).get("account").toString();
+                        HashMap<String, String> data = (HashMap<String, String>)iterSnapshot.getValue();
+                        String account = data.get("account");
+
                         libraryAccount.put(iterSnapshot.getKey(), account);
+                        libraryState.put(iterSnapshot.getKey(), AccountUnit.FINISH);
+                        if (data.containsKey("key") || data.containsKey("State") && data.get("State").equals(PENDING_STATE)){
+                            libraryState.put(iterSnapshot.getKey(), AccountUnit.PENDING);
+                        }
+                        else if (data.containsKey("State") && data.get("State").equals(ERROR_STATE)){
+                            libraryState.put(iterSnapshot.getKey(), AccountUnit.ERROR);
+                        }
                     }
                     if (SettingsFragment.Instance != null) {
                         SettingsFragment.Instance.UpdateUI(true);
@@ -248,10 +275,18 @@ public class AccountManager {
             return null;
     }
 
+    // 取得 library 帳號驗證狀態
+    public int GetLibraryState(String lib) {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null && libraryAccount.containsKey(lib))
+            return libraryState.get(lib);
+        else
+            return AccountUnit.FINISH;
+    }
+
     public void UpdateLibaccount(String lib, String account, String password) {
         // 修改帳號密碼
         if (CheckAccountAvailable(account, password)) {
-            Map<String, Object> users = new HashMap<String, Object>();
+            Map<String, Object> users = new HashMap<>();
             users.put(ACCOUNT_DATABASE_KEY+"/"+lib+"/account", account);
             users.put(ACCOUNT_DATABASE_KEY+"/"+lib+"/password", password);
             users.put(ACCOUNT_DATABASE_KEY+"/"+lib+"/key", "go");

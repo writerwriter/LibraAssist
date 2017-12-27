@@ -61,8 +61,9 @@ public class TagAdapter extends BaseSwipeAdapter{
         remove_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                list.remove(position);
-                notifyDataSetChanged();
+                //list.remove(position);
+                //notifyDataSetChanged();
+                Sub3BorrowFragment.Instance.UpdateBookmark(list.get(position).getTag_text(), "");
             }
         });
         edit_btn.setOnClickListener(new View.OnClickListener() {
@@ -76,8 +77,9 @@ public class TagAdapter extends BaseSwipeAdapter{
                         .input("Enter pages:", "", new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                                list.get(position).setTag_pages(input.toString());
-                                notifyDataSetChanged();
+                                //list.get(position).setTag_pages(input.toString());
+                                //notifyDataSetChanged();
+                                Sub3BorrowFragment.Instance.UpdateBookmark(list.get(position).getTag_text(), input.toString());
                             }
                         })
                         .show();

@@ -21,6 +21,7 @@ import java.util.List;
 
 public class SettingsFragment extends Fragment{
     public static SettingsFragment Instance;
+
     private TextView userNameText;
     private SignInButton googleSigninBtn;
     private Button googleSignoutBtn;
@@ -142,15 +143,19 @@ public class SettingsFragment extends Fragment{
     // 更新帳號按鈕文字
     public void UpdateAccount(String lib){
         String account = AccountManager.Instance.GetLibraryAccount(lib);
+        int state = AccountManager.Instance.GetLibraryState(lib);
         switch (lib) {
             case AccountManager.TAIPEI_LIB_KEY:
                 account_list.get(2).setAccount(account==null?"未登入":"帳號 : "+account);
+                account_list.get(2).setState(state);
                 break;
             case AccountManager.NEWTAIPEI_LIB_KEY:
                 account_list.get(1).setAccount(account==null?"未登入":"帳號 : "+account);
+                account_list.get(1).setState(state);
                 break;
             case AccountManager.NTPU_LIB_KEY:
                 account_list.get(0).setAccount(account==null?"未登入":"帳號 : "+account);
+                account_list.get(0).setState(state);
                 break;
         }
         adapter = new AccountListAdapter(account_list);
