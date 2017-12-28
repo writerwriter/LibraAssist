@@ -15,9 +15,9 @@
         android:background="@android:color/holo_blue_bright">
 
         <ImageView
+            android:id="@+id/library_login_icon"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:src="@drawable/ntpu_lib"
             />
 
         <EditText

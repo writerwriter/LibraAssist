@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,6 +29,7 @@ public class AccountListAdapter extends RecyclerView.Adapter<AccountListAdapter.
         public EditText enter_account;
         public EditText enter_password;
         public Button log_in;
+        public ImageView image;
 
         public ViewHolder(View itemView){
             super(itemView);
@@ -37,6 +39,7 @@ public class AccountListAdapter extends RecyclerView.Adapter<AccountListAdapter.
             enter_account = (EditText)itemView.findViewById(R.id.enter_account);
             enter_password = (EditText)itemView.findViewById(R.id.enter_password);
             log_in = (Button)itemView.findViewById(R.id.log_in_btn);
+            image = (ImageView)itemView.findViewById(R.id.library_login_icon);
         }
     }
     public AccountListAdapter(List<AccountUnit> accountList){
@@ -66,6 +69,17 @@ public class AccountListAdapter extends RecyclerView.Adapter<AccountListAdapter.
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final AccountUnit accountUnit = accountList.get(position);
+        switch ((accountUnit.getLibraryName())){
+            case "國立台北大學圖書館":
+                holder.image.setImageResource(R.drawable.ntpu_lib);
+                break;
+            case "新北市立圖書館":
+                holder.image.setImageResource(R.drawable.ntc_lib);
+                break;
+            case "台北市立圖書館":
+                holder.image.setImageResource(R.drawable.tc_lib);
+                break;
+        }
         holder.libraryName.setText(accountUnit.getLibraryName());
         holder.account.setText(accountUnit.getAccount());
         holder.log_in.setOnClickListener(new View.OnClickListener() {

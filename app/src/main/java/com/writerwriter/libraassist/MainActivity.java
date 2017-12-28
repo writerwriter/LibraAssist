@@ -153,6 +153,10 @@ public class MainActivity extends AppCompatActivity {
                         if(libraryInfoDetailFragment!=null){
                             fragmentManager.popBackStack();
                         }
+                        CollectionBookDetailFragment collectionBookDetailFragment = (CollectionBookDetailFragment) getSupportFragmentManager().findFragmentByTag("CollectionBookDetailFragment");
+                        if(collectionBookDetailFragment != null){
+                            fragmentManager.popBackStack();
+                        }
                         switch (item.getItemId()) {
                             case R.id.action_home:
                                 if(mainFragment==null) {
@@ -267,7 +271,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 else {
-                    if(fragmentManager.findFragmentByTag("settingsFragment") != fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount()-1)) fragmentManager.popBackStack();
+                    //if(fragmentManager.findFragmentByTag("settingsFragment") != fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount()-1)) fragmentManager.popBackStack();
+                    if(fragmentManager.getBackStackEntryCount() != 0) fragmentManager.popBackStack();
                     else fragmentManager.popBackStack("settingsFragment",FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     if(fragmentManager.findFragmentByTag("notificationFragment")==null){
                         toolbar.setNavigationIcon(mBack);
@@ -289,7 +294,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 else {
-                    if(fragmentManager.findFragmentByTag("notificationFragment")!= fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount()-1))fragmentManager.popBackStack();
+                    //if(fragmentManager.findFragmentByTag("notificationFragment")!= fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount()-1))fragmentManager.popBackStack();
+                    if(fragmentManager.getBackStackEntryCount() != 0) fragmentManager.popBackStack();
                     else fragmentManager.popBackStack("notificationFragment",FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     if(fragmentManager.findFragmentByTag("settingsFragment")==null){
                         toolbar.setNavigationIcon(mBack);

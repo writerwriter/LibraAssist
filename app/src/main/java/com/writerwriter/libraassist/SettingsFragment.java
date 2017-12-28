@@ -25,7 +25,6 @@ public class SettingsFragment extends Fragment{
     private TextView userNameText;
     private SignInButton googleSigninBtn;
     private Button googleSignoutBtn;
-    private Button[] libraryBtn = new Button[3];
     private List<AccountUnit> account_list = new ArrayList<>();
     private LinearLayoutManager linearLayoutManager;
     private RecyclerView account_recyclerView;
