@@ -15,7 +15,7 @@ import java.util.List;
 
 
 public class Sub1BorrowFragment extends Fragment {
-    private List<BorrowBookUnit> borrowBookList = new ArrayList<>();
+    //private List<BorrowBookUnit> borrowBookList = new ArrayList<>();
     private RecyclerView borrowListView;
     private LinearLayoutManager linearLayoutManager;
     public Sub1BorrowFragment() {
@@ -30,9 +30,10 @@ public class Sub1BorrowFragment extends Fragment {
 
         //TODO:在這加入書籍借閱的資訊到list裡。
 
-        borrowBookList.add(new BorrowBookUnit("a","a","a","a","a","a","a","a"));
+        //borrowBookList.add(new BorrowBookUnit("a","a","a","a","a","a","a","a"));
 
-        BorrowBookAdapter adapter = new BorrowBookAdapter(borrowBookList,getContext());
+        BorrowBookAdapter adapter = new BorrowBookAdapter(AccountManager.Instance.borrowBookList,
+                getContext());
         borrowListView = (RecyclerView)v.findViewById(R.id.borrow_book_recyclerView);
         borrowListView.setHasFixedSize(true);
         linearLayoutManager = new LinearLayoutManager(getActivity());

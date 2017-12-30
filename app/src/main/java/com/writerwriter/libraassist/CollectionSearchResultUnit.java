@@ -38,16 +38,16 @@ public class CollectionSearchResultUnit {
     }
 
     public void SetInfo(HashMap<String, String> data) {
-        if(data.get("isbn") != null) isbn = data.get("isbn");
-        if(data.get("title") != null) title = data.get("title");
-        if(data.get("author") != null) author = data.get("author");
-        if(data.get("img") != null) img = data.get("img");
-        if(data.get("publish_year") != null) publish_year = data.get("publish_year");
-        if(data.get("publisher") != null) publisher = data.get("publisher");
-        if(data.get("link") != null) link = data.get("link");
-        if(data.get("location") != null) location = data.get("location");
-        if(data.get("storage") != null) storage = data.get("storage");
-        if(data.get("searchState") != null) searchState = data.get("searchState");
+        if(data.containsKey("isbn")) isbn = data.get("isbn");
+        if(data.containsKey("title")) title = data.get("title");
+        if(data.containsKey("author")) author = data.get("author");
+        if(data.containsKey("img")) img = data.get("img");
+        if(data.containsKey("publish_year")) publish_year = data.get("publish_year");
+        if(data.containsKey("publisher")) publisher = data.get("publisher");
+        if(data.containsKey("link")) link = data.get("link");
+        if(data.containsKey("location")) location = data.get("location");
+        if(data.containsKey("storage")) storage = data.get("storage");
+        if(data.containsKey("searchState")) searchState = data.get("searchState");
 
         if (img.equals("")) img = ERROR_IMG;
     }

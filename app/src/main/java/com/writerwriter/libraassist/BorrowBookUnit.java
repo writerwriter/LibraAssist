@@ -1,5 +1,7 @@
 package com.writerwriter.libraassist;
 
+import java.util.HashMap;
+
 /**
  * Created by Larry on 2017/12/28.
  */
@@ -16,6 +18,18 @@ public class BorrowBookUnit {
     String renew_count;
 
     public BorrowBookUnit() {
+    }
+
+
+    public BorrowBookUnit(HashMap<String, String> data) {
+        if(data.containsKey("title")) this.book_name = data.get("title");
+        if(data.containsKey("author")) this.author = data.get("author");
+        if(data.containsKey("location")) this.location = data.get("location");
+        if(data.containsKey("search_book_number")) this.search_book_number = data.get("search_book_number");
+        if(data.containsKey("borrow_time")) this.borrow_time = data.get("borrow_time");
+        if(data.containsKey("return_time")) this.return_time = data.get("return_time");
+        if(data.containsKey("waiting_people_number")) this.waiting_people_number = data.get("waiting_people_number");
+        if(data.containsKey("renew_count")) this.renew_count = data.get("renew_count");
     }
 
     public BorrowBookUnit(String book_name, String author, String location, String search_book_number, String borrow_time, String return_time, String waiting_people_number, String renew_count) {

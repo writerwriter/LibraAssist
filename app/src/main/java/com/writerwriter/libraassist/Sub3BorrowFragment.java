@@ -45,12 +45,12 @@ public class Sub3BorrowFragment extends Fragment{
     private FloatingActionButton add_tag_btn;
     private List<TagUnit> list = new ArrayList<>();
     private TagAdapter adapter;
-    //private HashMap<String, String> bookmark = new HashMap<>();
 
     public Sub3BorrowFragment() {
         Instance = this;
 
         bookmarkRef = AccountManager.Instance.GetUserDatabaseRef(BOOK_MARK_KEY);
+        if (bookmarkRef == null) return;
         bookmarkEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
@@ -161,17 +161,20 @@ public class Sub3BorrowFragment extends Fragment{
     @Override
     public void onDestroy(){
         super.onDestroy();
-        bookmarkRef.removeEventListener(bookmarkEventListener);
+        if (bookmarkRef != null)
+            bookmarkRef.removeEventListener(bookmarkEventListener);
     }
 
     public void UpdateBookmark(String key, String value){
-        if (value.equals("")){
-            bookmarkRef.child(key).removeValue();
-        }
-        else{
-            Map<String, Object> data = new HashMap<>();
-            data.put(key, value);
-            bookmarkRef.updateChildren(data);
+        if (bookmarkRef != null){
+            if (value.equals("")){
+                bookmarkRef.child(key).removeValue();
+            }
+            else{
+                Map<String, Object> data = new HashMap<>();
+                data.put(key, value);
+                bookmarkRef.updateChildren(data);
+            }
         }
     }
 }

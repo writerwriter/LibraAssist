@@ -47,6 +47,7 @@ public class AccountManager {
     public static final String NTPU_LIB_KEY = "ntpu_lib";
     private static final String USER_DATABASE_PATH = "user_data";
     private static final String ACCOUNT_DATABASE_KEY = "library_account";
+    private static final String BORROWBOOK_DATABASE_KEY = "borrow_book/list";
     private static final String PENDING_STATE = "pending";
     private static final String ERROR_STATE = "Error";
 
@@ -54,13 +55,19 @@ public class AccountManager {
 
     private final AppCompatActivity mActivity;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    public static DatabaseReference ref;
-    private ChildEventListener mChildEventListener;
     private GoogleApiClient mGoogleApiClient;
+
+
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private static DatabaseReference ref;
+    private ChildEventListener mChildEventListener;
+    private static DatabaseReference borrowRef;
+    private ChildEventListener borrowEventListener;
 
     private HashMap<String, String> libraryAccount = new HashMap<>();
     private HashMap<String, Integer> libraryState = new HashMap<>();
+    public List<BorrowBookUnit> borrowBookList = new ArrayList<>();
+    public List<BorrowBookUnit> borrowedBookList = new ArrayList<>();
 
     public AccountManager(AppCompatActivity activity){
         mActivity = activity;
@@ -91,11 +98,18 @@ public class AccountManager {
                 if (user != null) {
                     Log.d(LOG_FLAG, "onAuthStateChanged:signed_in:" + user.getUid());
                     // 設定db路徑 若id!=googleid將會無法存取
-                    ref = database.getReference(USER_DATABASE_PATH+"/"+mAuth.getCurrentUser().getUid());
-                    if (mChildEventListener != null) {
+                    if (ref != null) {
                         ref.removeEventListener(mChildEventListener);
                     }
+                    ref = database.getReference(USER_DATABASE_PATH+"/"+mAuth.getCurrentUser().getUid());
                     ref.addChildEventListener(mChildEventListener);
+
+                    if (borrowRef != null)
+                        borrowRef.removeEventListener(borrowEventListener);
+                    borrowRef = GetUserDatabaseRef(BORROWBOOK_DATABASE_KEY);
+                    borrowRef.addChildEventListener(borrowEventListener);
+
+                    borrowRef.child("trigger").removeValue(); // 觸發重新爬借閱紀錄
                     if (SettingsFragment.Instance != null){
                         SettingsFragment.Instance.UpdateUI(true);
                     }
@@ -110,7 +124,7 @@ public class AccountManager {
             }
         };
 
-        // 定義 Firebase 資料庫 Listener
+        // 定義 Firebase 資料庫 Account Listener
         mChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
@@ -134,10 +148,10 @@ public class AccountManager {
                         if (SettingsFragment.Instance != null) {
                             SettingsFragment.Instance.UpdateAccount(iterSnapshot.getKey());
                         }
+                    }
                 }
             }
 
-        }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
                 //Log.d(LOG_FLAG, "DataChange "+dataSnapshot.getKey()+" "+dataSnapshot.getValue());
@@ -185,6 +199,30 @@ public class AccountManager {
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         };
+
+        // 定義 Firebase 資料庫 Borrow_book Listener
+        borrowEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                HashMap<String, String> data = (HashMap<String, String>) dataSnapshot.getValue();
+                if (data.containsKey("return_time"))
+                    borrowBookList.add(new BorrowBookUnit(data));
+                else
+                    borrowedBookList.add(new BorrowBookUnit(data));
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {}
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        };
     }
 
     // 初始化 啟動Listerner
@@ -197,11 +235,14 @@ public class AccountManager {
 
     // 關閉Listerner
     public void Close() {
-        if (mAuthListener != null) {
+        if (mAuth != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
-        if (mChildEventListener != null) {
+        if (ref != null) {
             ref.removeEventListener(mChildEventListener);
+        }
+        if (borrowRef != null) {
+            borrowRef.removeEventListener(borrowEventListener);
         }
     }
 
@@ -310,12 +351,5 @@ public class AccountManager {
             return false;
         }
         return true;
-    }
-
-    //TODO: FOR DEBUG
-    public void SendMessage(String msg){
-        Map<String, Object> users = new HashMap<String, Object>();
-        users.put(new java.util.Date().toString(), msg);
-        ref.updateChildren(users);
     }
 }
