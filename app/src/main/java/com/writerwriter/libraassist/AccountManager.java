@@ -109,7 +109,7 @@ public class AccountManager {
                     borrowRef = GetUserDatabaseRef(BORROWBOOK_DATABASE_KEY);
                     borrowRef.addChildEventListener(borrowEventListener);
 
-                    borrowRef.child("trigger").removeValue(); // 觸發重新爬借閱紀錄
+                    borrowRef.getParent().child("trigger").removeValue(); // 觸發重新爬借閱紀錄
                     if (SettingsFragment.Instance != null){
                         SettingsFragment.Instance.UpdateUI(true);
                     }
