@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:visibility="gone"
-        android:background="@android:color/holo_blue_bright">
+        android:background="@color/colorBG">
 
         <ImageView
             android:id="@+id/library_login_icon"
@@ -43,16 +43,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@android:color/white">
+        android:background="@color/colorPrimaryLight">
 
         <TextView
+            android:textSize="20sp"
+            android:id="@+id/library_name"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"/>
+
+        <TextView
+            android:textSize="20sp"
             android:id="@+id/account"
             android:layout_width="match_parent"
             android:layout_height="50dp" />
 
-        <TextView
-            android:id="@+id/library_name"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"/>
     </LinearLayout>
 </com.ramotion.foldingcell.FoldingCell>

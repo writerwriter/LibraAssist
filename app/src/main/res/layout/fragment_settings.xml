@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:folding-cell="http://schemas.android.com/apk/res-auto"
-    android:background="#fcecc9"
+    android:background="@color/colorBG"
     tools:context="com.writerwriter.libraassist.SettingsFragment"
     android:clickable="true">
 
