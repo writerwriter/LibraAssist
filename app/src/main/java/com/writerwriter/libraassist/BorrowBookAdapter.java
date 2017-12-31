@@ -68,7 +68,7 @@ public class BorrowBookAdapter extends RecyclerView.Adapter<BorrowBookAdapter.Vi
         holder.borrow_book_borrow_time.setText("借閱日期 : "+borrowBookUnit.getBorrow_time());
         holder.borrow_book_return_time.setText("應還日期 : "+borrowBookUnit.getReturn_time());
         holder.borrow_book_waiting_people_number.setText("預約人數 : "+borrowBookUnit.getWaiting_people_number());
-        holder.borrow_book_renew_count.setText("續借人數 : "+borrowBookUnit.getRenew_count());
+        holder.borrow_book_renew_count.setText("續借次數 : "+borrowBookUnit.getRenew_count());
         holder.itemView.setTag(position);
     }
 }

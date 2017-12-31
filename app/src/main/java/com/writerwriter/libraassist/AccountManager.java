@@ -333,15 +333,15 @@ public class AccountManager {
             users.put(ACCOUNT_DATABASE_KEY+"/"+lib+"/key", "go");
             //libraryAccount.put(lib, account);
             ref.updateChildren(users);
-            Toast.makeText(mActivity.getApplicationContext(), "Account update success: Update account & passwd.", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(mActivity.getApplicationContext(), "Account update success: Update account & passwd.", Toast.LENGTH_SHORT).show();
         }
         // 刪除帳號
         else if (account.equals("") && password.equals("")) { //TODO: 暫時以兩個欄位都為空白就刪除帳號
             ref.child(ACCOUNT_DATABASE_KEY+"/"+lib).removeValue();
-            Toast.makeText(mActivity.getApplicationContext(), "Account update success: Deleted account.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivity.getApplicationContext(), "帳號登出。", Toast.LENGTH_SHORT).show();
         }
         else {
-            Toast.makeText(mActivity.getApplicationContext(), "Account update failed: Some label is empty.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivity.getApplicationContext(), "請輸入完整的帳號和密碼。", Toast.LENGTH_SHORT).show();
         }
     }
 

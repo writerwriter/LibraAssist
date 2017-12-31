@@ -45,7 +45,7 @@ public class SettingsFragment extends Fragment{
         linearLayoutManager = new LinearLayoutManager(getActivity());
         account_recyclerView.setLayoutManager(linearLayoutManager);
 
-        adapter = new AccountListAdapter(account_list);
+        adapter = new AccountListAdapter(account_list,getContext());
         account_recyclerView.setAdapter(adapter);
 
         Instance = this;
@@ -157,7 +157,7 @@ public class SettingsFragment extends Fragment{
                 account_list.get(0).setState(state);
                 break;
         }
-        adapter = new AccountListAdapter(account_list);
+        adapter = new AccountListAdapter(account_list,getContext());
         account_recyclerView.setAdapter(adapter);
     }
 }

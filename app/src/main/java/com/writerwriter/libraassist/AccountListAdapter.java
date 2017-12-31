@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.ramotion.foldingcell.FoldingCell;
@@ -22,6 +23,7 @@ import java.util.List;
 
 public class AccountListAdapter extends RecyclerView.Adapter<AccountListAdapter.ViewHolder> {
     private List<AccountUnit> accountList;
+    private Context mContext;
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         public TextView account;
@@ -29,6 +31,7 @@ public class AccountListAdapter extends RecyclerView.Adapter<AccountListAdapter.
         public EditText enter_account;
         public EditText enter_password;
         public Button log_in;
+        public Button log_out;
         public ImageView image;
 
         public ViewHolder(View itemView){
@@ -39,11 +42,13 @@ public class AccountListAdapter extends RecyclerView.Adapter<AccountListAdapter.
             enter_account = (EditText)itemView.findViewById(R.id.enter_account);
             enter_password = (EditText)itemView.findViewById(R.id.enter_password);
             log_in = (Button)itemView.findViewById(R.id.log_in_btn);
+            log_out = (Button)itemView.findViewById(R.id.log_out_btn);
             image = (ImageView)itemView.findViewById(R.id.library_login_icon);
         }
     }
-    public AccountListAdapter(List<AccountUnit> accountList){
+    public AccountListAdapter(List<AccountUnit> accountList, Context context){
         this.accountList = accountList;
+        this.mContext = context;
     }
 
     @Override
@@ -85,24 +90,47 @@ public class AccountListAdapter extends RecyclerView.Adapter<AccountListAdapter.
         holder.log_in.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!holder.enter_account.getText().toString().isEmpty() && !holder.enter_account.getText().toString().isEmpty()) {
+                    switch (accountUnit.getLibraryName()) {
+                        case "國立台北大學圖書館":
+                            AccountManager.Instance.UpdateLibaccount(AccountManager.NTPU_LIB_KEY,
+                                    holder.enter_account.getText().toString(),
+                                    holder.enter_password.getText().toString());
+                            break;
+                        case "新北市立圖書館":
+                            AccountManager.Instance.UpdateLibaccount(AccountManager.NEWTAIPEI_LIB_KEY,
+                                    holder.enter_account.getText().toString(),
+                                    holder.enter_password.getText().toString());
+                            break;
+                        case "台北市立圖書館":
+                            AccountManager.Instance.UpdateLibaccount(AccountManager.TAIPEI_LIB_KEY,
+                                    holder.enter_account.getText().toString(),
+                                    holder.enter_password.getText().toString());
+                            break;
+                    }
+                }
+                else if(holder.enter_account.getText().toString().isEmpty() || holder.enter_account.getText().toString().isEmpty()){
+                    Toast.makeText(mContext,"請輸入完整的帳號和密碼。",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        holder.log_out.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 switch(accountUnit.getLibraryName()){
                     case "國立台北大學圖書館":
                         AccountManager.Instance.UpdateLibaccount(AccountManager.NTPU_LIB_KEY,
-                                holder.enter_account.getText().toString(),
-                                holder.enter_password.getText().toString());
+                                "", "");
                         break;
                     case "新北市立圖書館":
                         AccountManager.Instance.UpdateLibaccount(AccountManager.NEWTAIPEI_LIB_KEY,
-                                holder.enter_account.getText().toString(),
-                                holder.enter_password.getText().toString());
+                                "", "");
                         break;
                     case "台北市立圖書館":
                         AccountManager.Instance.UpdateLibaccount(AccountManager.TAIPEI_LIB_KEY,
-                                holder.enter_account.getText().toString(),
-                                holder.enter_password.getText().toString());
+                                "","");
                         break;
                 }
-
             }
         });
         if (accountUnit.getState() == AccountUnit.PENDING){

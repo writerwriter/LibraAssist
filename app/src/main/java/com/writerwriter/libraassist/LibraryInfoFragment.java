@@ -35,8 +35,8 @@ public class LibraryInfoFragment extends Fragment {
         library_infos.clear();
 
         library_infos.add(new Library_info(R.drawable.ic_library_img1,"台北大學圖書館",R.drawable.ic_arrow_right_black_24px));
-        library_infos.add(new Library_info(R.drawable.ic_library_img1,"新北市立圖書館",R.drawable.ic_arrow_right_black_24px));
-        library_infos.add(new Library_info(R.drawable.ic_library_img1,"台北市立圖書館",R.drawable.ic_arrow_right_black_24px));
+        library_infos.add(new Library_info(R.drawable.ntc_icon,"新北市立圖書館",R.drawable.ic_arrow_right_black_24px));
+        library_infos.add(new Library_info(R.drawable.tc_icon,"台北市立圖書館",R.drawable.ic_arrow_right_black_24px));
 
         library_info_list = (RecyclerView)v.findViewById(R.id.library_info_recyclerview);
         library_info_list.setHasFixedSize(true);
@@ -53,8 +53,12 @@ public class LibraryInfoFragment extends Fragment {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 LibraryInfoDetailFragment libraryInfoDetailFragment = (LibraryInfoDetailFragment)getFragmentManager().findFragmentByTag("LibraryInfoDetailFragment");
                 if(libraryInfoDetailFragment == null) {
+                    libraryInfoDetailFragment = new LibraryInfoDetailFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("id",position);
+                    libraryInfoDetailFragment.setArguments(bundle);
                     fragmentTransaction.setCustomAnimations(R.anim.slide_frag_in_right, R.anim.slide_frag_out_right, R.anim.slide_frag_in_right, R.anim.slide_frag_out_right);
-                    fragmentTransaction.add(R.id.load_fragment,new LibraryInfoDetailFragment(), "LibraryInfoDetailFragment");
+                    fragmentTransaction.add(R.id.load_fragment,libraryInfoDetailFragment, "LibraryInfoDetailFragment");
                     fragmentTransaction.addToBackStack("LibraryInfoDetailFragment");
                     fragmentTransaction.commit();
                 }
