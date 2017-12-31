@@ -62,13 +62,13 @@ public class BorrowBookAdapter extends RecyclerView.Adapter<BorrowBookAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
         final BorrowBookUnit borrowBookUnit = borrowBookUnitList.get(position);
         holder.borrow_book_title.setText(borrowBookUnit.getBook_name());
-        holder.borrow_book_author.setText(borrowBookUnit.getAuthor());
-        holder.borrow_book_location.setText(borrowBookUnit.getLocation());
-        holder.borrow_book_search_number.setText(borrowBookUnit.getSearch_book_number());
-        holder.borrow_book_borrow_time.setText(borrowBookUnit.getBorrow_time());
-        holder.borrow_book_return_time.setText(borrowBookUnit.getReturn_time());
-        holder.borrow_book_waiting_people_number.setText(borrowBookUnit.getWaiting_people_number());
-        holder.borrow_book_renew_count.setText(borrowBookUnit.getRenew_count());
+        holder.borrow_book_author.setText("作者 : "+borrowBookUnit.getAuthor());
+        holder.borrow_book_location.setText("館藏地 : "+borrowBookUnit.getLocation());
+        holder.borrow_book_search_number.setText("索書號 : " + borrowBookUnit.getSearch_book_number());
+        holder.borrow_book_borrow_time.setText("借閱日期 : "+borrowBookUnit.getBorrow_time());
+        holder.borrow_book_return_time.setText("應還日期 : "+borrowBookUnit.getReturn_time());
+        holder.borrow_book_waiting_people_number.setText("預約人數 : "+borrowBookUnit.getWaiting_people_number());
+        holder.borrow_book_renew_count.setText("續借人數 : "+borrowBookUnit.getRenew_count());
         holder.itemView.setTag(position);
     }
 }
