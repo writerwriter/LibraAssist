@@ -48,7 +48,8 @@
                 android:layout_height="wrap_content"
                 android:text="Sign out"
                 android:layout_toLeftOf="@id/google_signin_button"
-                android:visibility="visible" />
+                android:visibility="visible"
+                android:background="#00FFFFFF"/>
         </LinearLayout>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/account_recyclerlist"

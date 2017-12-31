@@ -39,12 +39,22 @@ public class CollectionBookDetailFragment extends Fragment {
 
         Picasso.with(getContext()).load(collectionSearchResultUnit.getImg()).into(cover);
         title.setText(collectionSearchResultUnit.getTitle());
-        author.setText("作者:"+collectionSearchResultUnit.getAuthor());
-        ISBN.setText("ISBN:"+collectionSearchResultUnit.getIsbn());
-        publisher.setText("出版社:"+collectionSearchResultUnit.getPublisher());
-        publish_year.setText("出版年份:"+collectionSearchResultUnit.getPublish_year());
-        remain.setText("剩餘數量:"+collectionSearchResultUnit.getStorage());
-        library.setText("館藏地:"+collectionSearchResultUnit.getLibrary());
+        author.setText("作者 : "+collectionSearchResultUnit.getAuthor());
+        ISBN.setText("ISBN : "+collectionSearchResultUnit.getIsbn());
+        publisher.setText("出版社 : "+collectionSearchResultUnit.getPublisher());
+        publish_year.setText("出版年份 : "+collectionSearchResultUnit.getPublish_year());
+        remain.setText("剩餘數量 : "+collectionSearchResultUnit.getStorage());
+        switch (collectionSearchResultUnit.getLibrary()){
+            case "ntc_lib":
+                library.setText("館藏地 : 新北市立圖書館");
+                break;
+            case "ntpu_lib":
+                library.setText("館藏地 : 台北大學圖書館");
+                break;
+            case "tc_lib":
+                library.setText("館藏地 : 台北市立圖書館");
+                break;
+        }
 
         return v;
     }

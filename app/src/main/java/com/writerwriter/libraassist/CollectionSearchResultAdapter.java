@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -71,12 +72,23 @@ public class CollectionSearchResultAdapter extends RecyclerView.Adapter<Collecti
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         CollectionSearchResultUnit collectionSearchResultUnit = collectionSearchResults.get(position);
-        holder.mTextView.setText("書名:"+collectionSearchResultUnit.getTitle());
+        holder.mTextView.setText(collectionSearchResultUnit.getTitle());
+        holder.mTextView.setTextColor(Color.BLACK);
 
         Picasso.with(context).load(collectionSearchResultUnit.getImg()).into(holder.mImageView);
 
-        holder.mTextView2.setText("作者:"+collectionSearchResultUnit.getAuthor());
-        holder.mTextView3.setText("館藏地:"+collectionSearchResultUnit.getLibrary());
+        holder.mTextView2.setText("作者 : "+collectionSearchResultUnit.getAuthor());
+        switch (collectionSearchResultUnit.getLibrary()){
+            case "ntc_lib":
+                holder.mTextView3.setText("館藏地 : 新北市立圖書館");
+                break;
+            case "ntpu_lib":
+                holder.mTextView3.setText("館藏地 : 台北大學圖書館");
+                break;
+            case "tc_lib":
+                holder.mTextView3.setText("館藏地 : 台北市立圖書館");
+                break;
+        }
         holder.itemView.setTag(position);
     }
 

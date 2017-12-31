@@ -41,12 +41,14 @@
                 android:id="@+id/log_out_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Log out"/>
+                android:text="Log out"
+                android:background="#00FFFFFF"/>
             <Button
                 android:id="@+id/log_in_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Log in"/>
+                android:text="Log in"
+                android:background="#00FFFFFF"/>
 
         </LinearLayout>
     </LinearLayout>
