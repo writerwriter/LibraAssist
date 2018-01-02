@@ -51,7 +51,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         final NotificationUnit notificationUnit = notificationUnitList.get(position);
         holder.title.setText(notificationUnit.getTitle());
-        holder.left_days.setText(notificationUnit.getLeft_days());
+        holder.left_days.setText("尚餘 "+notificationUnit.getLeft_days()+" 天");
         holder.location.setText(notificationUnit.getLocation());
         holder.itemView.setTag(position);
     }

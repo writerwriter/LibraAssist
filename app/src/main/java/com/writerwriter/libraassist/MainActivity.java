@@ -39,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
     //private NonSwipeableViewPager viewPager;
 
-    private AnimatedVectorDrawable mMenu;
-    private AnimatedVectorDrawable mBack;
+    public static AnimatedVectorDrawable mMenu;
+    public static AnimatedVectorDrawable mBack;
 
     public static Toolbar toolbar;
 
@@ -117,11 +117,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(toolbar.getNavigationIcon() == mMenu){
                     fragmentManager.popBackStack();
+                    fragmentManager.executePendingTransactions();
+                    if(fragmentManager.getBackStackEntryCount() == 0){
+                        toolbar.setNavigationIcon(mBack);
+                        mBack.start();
+                    }
                 }
-                if(fragmentManager.findFragmentByTag("notificationFragment")!=null && fragmentManager.findFragmentByTag("settingsFragment")==null || fragmentManager.findFragmentByTag("notificationFragment")==null && fragmentManager.findFragmentByTag("settingsFragment")!=null){
+                /*if(fragmentManager.findFragmentByTag("notificationFragment")!=null && fragmentManager.findFragmentByTag("settingsFragment")==null || fragmentManager.findFragmentByTag("notificationFragment")==null && fragmentManager.findFragmentByTag("settingsFragment")!=null){
                     toolbar.setNavigationIcon(mBack);
                     mBack.start();
-                }
+                }*/
             }
         });
 

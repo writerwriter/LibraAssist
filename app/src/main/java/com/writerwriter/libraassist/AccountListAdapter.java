@@ -77,12 +77,15 @@ public class AccountListAdapter extends RecyclerView.Adapter<AccountListAdapter.
         switch ((accountUnit.getLibraryName())){
             case "國立台北大學圖書館":
                 holder.image.setImageResource(R.drawable.ntpu_lib);
+                holder.image.setMaxHeight(holder.image.getWidth()*960/1920);
                 break;
             case "新北市立圖書館":
                 holder.image.setImageResource(R.drawable.ntc_lib);
+                holder.image.setMaxHeight(holder.image.getWidth()*472/1280);
                 break;
             case "台北市立圖書館":
                 holder.image.setImageResource(R.drawable.tc_lib);
+                holder.image.setMaxHeight(holder.image.getWidth()*960/1920);
                 break;
         }
         holder.libraryName.setText(accountUnit.getLibraryName());

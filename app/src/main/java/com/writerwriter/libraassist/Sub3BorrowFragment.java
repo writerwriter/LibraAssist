@@ -108,7 +108,7 @@ public class Sub3BorrowFragment extends Fragment{
             public void onClick(View view) {
                 customDialogView.setVisibility(View.VISIBLE);
                 new MaterialDialog.Builder(getContext())
-                        .title("test")
+                        .title("新增書籤")
                         .positiveText("Add")
                         .negativeText("Cancel")
                         .onAny(new MaterialDialog.SingleButtonCallback() {
@@ -129,14 +129,12 @@ public class Sub3BorrowFragment extends Fragment{
                                             }
                                         }
                                         if(check){
-                                            Toast.makeText(getContext(),"test1",Toast.LENGTH_SHORT).show();
                                             //list.add(new TagUnit(e1.getText().toString(),e2.getText().toString()));
                                             //adapter.notifyDataSetChanged();
                                             UpdateBookmark(e1.getText().toString(), e2.getText().toString());
                                         }
                                         break;
                                     case NEGATIVE:
-                                        Toast.makeText(getContext(),"test2",Toast.LENGTH_SHORT).show();
                                         break;
                                 }
                             }

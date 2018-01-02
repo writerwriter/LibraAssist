@@ -1,12 +1,17 @@
 package com.writerwriter.libraassist;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +23,8 @@ public class CollectionBookDetailFragment extends Fragment {
 
     ImageView cover;
     TextView title,author,ISBN,publisher,publish_year,remain,library;
+    WebView web;
+    Button btn;
 
     public CollectionBookDetailFragment() {
         // Required empty public constructor
@@ -36,6 +43,8 @@ public class CollectionBookDetailFragment extends Fragment {
         publish_year = v.findViewById(R.id.book_detail_publishYear);
         remain = v.findViewById(R.id.book_detail_remain);
         library = v.findViewById(R.id.book_detail_library);
+        web = v.findViewById(R.id.collection_detail_borrow_book_web_url);
+        btn = v.findViewById(R.id.borrow_button);
 
         Picasso.with(getContext()).load(collectionSearchResultUnit.getImg()).into(cover);
         title.setText(collectionSearchResultUnit.getTitle());
@@ -55,6 +64,24 @@ public class CollectionBookDetailFragment extends Fragment {
                 library.setText("館藏地 : 台北市立圖書館");
                 break;
         }
+        web.getSettings().setJavaScriptEnabled(true);
+        web.setWebViewClient(new WebViewClient());
+        web.loadUrl(collectionSearchResultUnit.getLink());
+        web.setBackgroundColor(Color.WHITE);
+        web.setVisibility(View.GONE);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(web.getVisibility() == View.GONE){
+                    btn.setText("返回");
+                    web.setVisibility(View.VISIBLE);
+                }
+                else if(web.getVisibility() == View.VISIBLE){
+                    btn.setText("預借書籍");
+                    web.setVisibility(View.GONE);
+                }
+            }
+        });
 
         return v;
     }

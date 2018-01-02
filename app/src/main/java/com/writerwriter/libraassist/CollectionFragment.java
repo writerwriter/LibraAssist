@@ -271,7 +271,6 @@ public class CollectionFragment extends Fragment {
                 Map<String, Object> users = new HashMap<>();
                 users.put(SEARCHKEY_KEY, query);
                 searchRef.updateChildren(users);
-
                 return true;
             }
 

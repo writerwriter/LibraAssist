@@ -3,6 +3,7 @@ package com.writerwriter.libraassist;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.AnimatedVectorDrawable;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
@@ -25,12 +26,16 @@ public class LibraryInfoFragment extends Fragment {
     private LinearLayoutManager mLayoutManager;
     private List<Library_info> library_infos = new ArrayList<>();
     private FragmentManager fragmentManager;
+    public static Toolbar toolbar = MainActivity.toolbar;
+    public static AnimatedVectorDrawable mMenu = MainActivity.mMenu;
+    public static AnimatedVectorDrawable mBack = MainActivity.mBack;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_library_info, container, false);
+
 
         library_infos.clear();
 
@@ -61,6 +66,8 @@ public class LibraryInfoFragment extends Fragment {
                     fragmentTransaction.add(R.id.load_fragment,libraryInfoDetailFragment, "LibraryInfoDetailFragment");
                     fragmentTransaction.addToBackStack("LibraryInfoDetailFragment");
                     fragmentTransaction.commit();
+                    toolbar.setNavigationIcon(mMenu);
+                    mMenu.start();
                 }
                 else{
                     fragmentManager.popBackStack();

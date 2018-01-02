@@ -5,6 +5,7 @@
     android:background="@color/colorBG"
     tools:context="com.writerwriter.libraassist.CollectionBookDetailFragment">
 
+
     <ImageView
         android:id="@+id/book_detail_cover"
         android:layout_width="140dp"
@@ -69,5 +70,23 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/book_detail_library"
         android:textSize="20sp"/>
+    <Button
+        android:id="@+id/borrow_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="5dp"
+        android:text="預借書籍"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/white"
+        />
+
+    <WebView
+        android:id="@+id/collection_detail_borrow_book_web_url"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </WebView>
 
 </RelativeLayout>
