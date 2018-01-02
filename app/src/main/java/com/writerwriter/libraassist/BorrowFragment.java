@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.TableLayout;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class BorrowFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_borrow, container, false);
-        tabs = (TabLayout)v.findViewById(R.id.tabs);
+        tabs = v.findViewById(R.id.tabs);
         tabs.addTab(tabs.newTab().setText("Borrow"));
         tabs.addTab(tabs.newTab().setText("Borrowed"));
         tabs.addTab(tabs.newTab().setText("Tags"));
@@ -88,6 +89,10 @@ public class BorrowFragment extends Fragment {
         });
         Sub1BorrowFragment sub1BorrowFragment = new Sub1BorrowFragment();
         getFragmentManager().beginTransaction().replace(R.id.borrowSubPageContainer,sub1BorrowFragment,"sub1BorrowFragment").commit();
+
+        if (AccountManager.Instance.GetGoogleAccountName() == null) {
+            Toast.makeText(getContext(), "請先登入才能使用借閱紀錄功能", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

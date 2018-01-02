@@ -49,8 +49,6 @@ public class Sub3BorrowFragment extends Fragment{
     public Sub3BorrowFragment() {
         Instance = this;
 
-        bookmarkRef = AccountManager.Instance.GetUserDatabaseRef(BOOK_MARK_KEY);
-        if (bookmarkRef == null) return;
         bookmarkEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
@@ -96,13 +94,13 @@ public class Sub3BorrowFragment extends Fragment{
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_sub3_borrow, container, false);
         final View customDialogView = v.findViewById(R.id.custom_view);
-        final EditText e1 = (EditText)v.findViewById(R.id.enter_tag_name);
-        final EditText e2 = (EditText)v.findViewById(R.id.enter_tag_pages);
+        final EditText e1 = v.findViewById(R.id.enter_tag_name);
+        final EditText e2 = v.findViewById(R.id.enter_tag_pages);
         customDialogView.setVisibility(View.GONE);
-        final ListView listView = (ListView) v.findViewById(R.id.tag_list_view);
+        final ListView listView = v.findViewById(R.id.tag_list_view);
         adapter = new TagAdapter(getContext(),list);
         listView.setAdapter(adapter);
-        add_tag_btn = (FloatingActionButton) v.findViewById(R.id.add_tag_button);
+        add_tag_btn = v.findViewById(R.id.add_tag_button);
         add_tag_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -129,8 +127,6 @@ public class Sub3BorrowFragment extends Fragment{
                                             }
                                         }
                                         if(check){
-                                            //list.add(new TagUnit(e1.getText().toString(),e2.getText().toString()));
-                                            //adapter.notifyDataSetChanged();
                                             UpdateBookmark(e1.getText().toString(), e2.getText().toString());
                                         }
                                         break;
@@ -150,7 +146,12 @@ public class Sub3BorrowFragment extends Fragment{
                         .show();
             }
         });
-
+        if (bookmarkRef == null){
+            bookmarkRef = AccountManager.Instance.GetUserDatabaseRef(BOOK_MARK_KEY);
+            if (bookmarkRef == null){
+                return v;
+            }
+        }
         bookmarkRef.addChildEventListener(bookmarkEventListener);
 
         return v;

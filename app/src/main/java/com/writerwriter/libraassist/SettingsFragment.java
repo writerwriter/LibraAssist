@@ -39,7 +39,7 @@ public class SettingsFragment extends Fragment{
         account_list.add(new AccountUnit(null,null,"新北市立圖書館"));
         account_list.add(new AccountUnit(null,null,"台北市立圖書館"));
 
-        account_recyclerView = (RecyclerView)v.findViewById(R.id.account_recyclerlist);
+        account_recyclerView = v.findViewById(R.id.account_recyclerlist);
         account_recyclerView.setHasFixedSize(true);
 
         linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -49,7 +49,6 @@ public class SettingsFragment extends Fragment{
         account_recyclerView.setAdapter(adapter);
 
         Instance = this;
-        // Inflate the layout for this fragment
         return v;
     }
 
@@ -76,37 +75,6 @@ public class SettingsFragment extends Fragment{
                 AccountManager.Instance.GoogleSignOut();
             }
         });
-        /*// 台北市圖書館 Botton
-        libraryBtn[0] = getView().findViewById(R.id.tcl_account_btn);
-        libraryBtn[0].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AccountManager.Instance.UpdateLibaccount(AccountManager.TAIPEI_LIB_KEY,
-                        ((EditText)getView().findViewById(R.id.tcl_account_edit)).getText().toString(),
-                        ((EditText)getView().findViewById(R.id.tcl_password_edit)).getText().toString());
-            }
-        });
-        // 新北市圖書館 Botton
-        libraryBtn[1] = getView().findViewById(R.id.ntcl_account_btn);
-        libraryBtn[1].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AccountManager.Instance.UpdateLibaccount(AccountManager.NEWTAIPEI_LIB_KEY,
-                        ((EditText)getView().findViewById(R.id.ntcl_account_edit)).getText().toString(),
-                        ((EditText)getView().findViewById(R.id.ntcl_password_edit)).getText().toString());
-            }
-        });
-        // 台北大學圖書館 Botton
-        libraryBtn[2] = getView().findViewById(R.id.ntpul_account_btn);
-        libraryBtn[2].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AccountManager.Instance.UpdateLibaccount(AccountManager.NTPU_LIB_KEY,
-                        ((EditText)getView().findViewById(R.id.ntpul_account_edit)).getText().toString(),
-                        ((EditText)getView().findViewById(R.id.ntpul_password_edit)).getText().toString());
-            }
-        });*/
-
 
         UpdateUI(FirebaseAuth.getInstance().getCurrentUser() != null);
     }
@@ -118,46 +86,48 @@ public class SettingsFragment extends Fragment{
 
     // 更新介面
     public void UpdateUI(boolean isLogin){
+        String name = AccountManager.Instance.GetGoogleAccountName();
         if (isLogin) {
             googleSigninBtn.setVisibility(View.INVISIBLE);
-            googleSignoutBtn.setVisibility(View.VISIBLE);
-            userNameText.setText(AccountManager.Instance.GetGoogleAccountName());
-            /*for (Button btn : libraryBtn) {
-                btn.setEnabled(true);
-            }*/
         }
         else {
             googleSigninBtn.setVisibility(View.VISIBLE);
+        }
+        if (name != null){
+            googleSignoutBtn.setVisibility(View.VISIBLE);
+            userNameText.setText(name);
+        }
+        else {
             googleSignoutBtn.setVisibility(View.INVISIBLE);
-            userNameText.setText(AccountManager.Instance.GetGoogleAccountName());
-            /*for (Button btn : libraryBtn) {
-                btn.setEnabled(false);
-            }*/
+            userNameText.setText("Please Login");
         }
         UpdateAccount(AccountManager.TAIPEI_LIB_KEY);
         UpdateAccount(AccountManager.NEWTAIPEI_LIB_KEY);
         UpdateAccount(AccountManager.NTPU_LIB_KEY);
+
+        adapter = new AccountListAdapter(account_list,getContext());
+        account_recyclerView.setAdapter(adapter);
     }
 
     // 更新帳號按鈕文字
-    public void UpdateAccount(String lib){
+    private void UpdateAccount(String lib){
         String account = AccountManager.Instance.GetLibraryAccount(lib);
+        account = account==null?"未登入":"帳號 : "+account;
         int state = AccountManager.Instance.GetLibraryState(lib);
+
         switch (lib) {
             case AccountManager.TAIPEI_LIB_KEY:
-                account_list.get(2).setAccount(account==null?"未登入":"帳號 : "+account);
+                account_list.get(2).setAccount(account);
                 account_list.get(2).setState(state);
                 break;
             case AccountManager.NEWTAIPEI_LIB_KEY:
-                account_list.get(1).setAccount(account==null?"未登入":"帳號 : "+account);
+                account_list.get(1).setAccount(account);
                 account_list.get(1).setState(state);
                 break;
             case AccountManager.NTPU_LIB_KEY:
-                account_list.get(0).setAccount(account==null?"未登入":"帳號 : "+account);
+                account_list.get(0).setAccount(account);
                 account_list.get(0).setState(state);
                 break;
         }
-        adapter = new AccountListAdapter(account_list,getContext());
-        account_recyclerView.setAdapter(adapter);
     }
 }

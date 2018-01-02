@@ -174,7 +174,7 @@ public class CollectionFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_collection, container, false);
         collectionSearchResults = v.findViewById(R.id.colleciton_recyclerview);
 
-        hotkey_title = (TextView)v.findViewById(R.id.hotkey_title);
+        hotkey_title = v.findViewById(R.id.hotkey_title);
 
         textViews.add((TextView) v.findViewById(R.id.hotkey_0));
         textViews.add((TextView) v.findViewById(R.id.hotkey_1));
@@ -189,7 +189,7 @@ public class CollectionFragment extends Fragment {
         textViews.add((TextView) v.findViewById(R.id.hotkey_10));
         textViews.add((TextView) v.findViewById(R.id.hotkey_11));
 
-        bookLoadingAnimation = (BookLoading)getActivity().findViewById(R.id.book_loading_animation);
+        bookLoadingAnimation = getActivity().findViewById(R.id.book_loading_animation);
         bookLoadingAnimation.setVisibility(View.GONE);
 
         for(int i=0;i<hotkey.size()&&i<textViews.size();i++){
@@ -220,6 +220,9 @@ public class CollectionFragment extends Fragment {
     public void onStart(){
         super.onStart();
 
+        if (AccountManager.Instance.GetGoogleAccountName() == null) {
+            Toast.makeText(getContext(), "請先登入才能使用搜尋功能", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -231,7 +234,10 @@ public class CollectionFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-
+                if (AccountManager.Instance.GetGoogleAccountName() == null) {
+                    Toast.makeText(getContext(), "請先登入才能使用搜尋功能", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
                 searchView.clearFocus();
 
                 bookLoadingAnimation.setVisibility(View.VISIBLE);

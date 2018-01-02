@@ -96,17 +96,17 @@ public class AccountListAdapter extends RecyclerView.Adapter<AccountListAdapter.
                 if(!holder.enter_account.getText().toString().isEmpty() && !holder.enter_account.getText().toString().isEmpty()) {
                     switch (accountUnit.getLibraryName()) {
                         case "國立台北大學圖書館":
-                            AccountManager.Instance.UpdateLibaccount(AccountManager.NTPU_LIB_KEY,
+                            AccountManager.Instance.SendUpdateAccount(AccountManager.NTPU_LIB_KEY,
                                     holder.enter_account.getText().toString(),
                                     holder.enter_password.getText().toString());
                             break;
                         case "新北市立圖書館":
-                            AccountManager.Instance.UpdateLibaccount(AccountManager.NEWTAIPEI_LIB_KEY,
+                            AccountManager.Instance.SendUpdateAccount(AccountManager.NEWTAIPEI_LIB_KEY,
                                     holder.enter_account.getText().toString(),
                                     holder.enter_password.getText().toString());
                             break;
                         case "台北市立圖書館":
-                            AccountManager.Instance.UpdateLibaccount(AccountManager.TAIPEI_LIB_KEY,
+                            AccountManager.Instance.SendUpdateAccount(AccountManager.TAIPEI_LIB_KEY,
                                     holder.enter_account.getText().toString(),
                                     holder.enter_password.getText().toString());
                             break;
@@ -122,16 +122,13 @@ public class AccountListAdapter extends RecyclerView.Adapter<AccountListAdapter.
             public void onClick(View view) {
                 switch(accountUnit.getLibraryName()){
                     case "國立台北大學圖書館":
-                        AccountManager.Instance.UpdateLibaccount(AccountManager.NTPU_LIB_KEY,
-                                "", "");
+                        AccountManager.Instance.SendDeleteAccount(AccountManager.NTPU_LIB_KEY);
                         break;
                     case "新北市立圖書館":
-                        AccountManager.Instance.UpdateLibaccount(AccountManager.NEWTAIPEI_LIB_KEY,
-                                "", "");
+                        AccountManager.Instance.SendDeleteAccount(AccountManager.NEWTAIPEI_LIB_KEY);
                         break;
                     case "台北市立圖書館":
-                        AccountManager.Instance.UpdateLibaccount(AccountManager.TAIPEI_LIB_KEY,
-                                "","");
+                        AccountManager.Instance.SendDeleteAccount(AccountManager.TAIPEI_LIB_KEY);
                         break;
                 }
             }

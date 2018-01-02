@@ -40,27 +40,28 @@ import static java.nio.file.Paths.get;
 public class AccountManager {
     public static AccountManager Instance;
     private static final String LOG_FLAG = "---AccountManager---";
-
     public static final int RC_SIGN_IN = 1;
+
     public static final String TAIPEI_LIB_KEY = "tc_lib";
     public static final String NEWTAIPEI_LIB_KEY = "ntc_lib";
     public static final String NTPU_LIB_KEY = "ntpu_lib";
+
     private static final String USER_DATABASE_PATH = "user_data";
     private static final String ACCOUNT_DATABASE_KEY = "library_account";
     private static final String BORROWBOOK_DATABASE_KEY = "borrow_book/list";
+
+    private static final String INITAL_STATE = "initialize";
     private static final String PENDING_STATE = "pending";
     private static final String ERROR_STATE = "Error";
 
     public FirebaseAuth mAuth;
-
     private final AppCompatActivity mActivity;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private GoogleApiClient mGoogleApiClient;
 
-
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private static DatabaseReference ref;
-    private ChildEventListener mChildEventListener;
+    private static DatabaseReference accountRef;
+    private ChildEventListener accountEventListener;
     private static DatabaseReference borrowRef;
     private ChildEventListener borrowEventListener;
 
@@ -97,19 +98,21 @@ public class AccountManager {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     Log.d(LOG_FLAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    // 設定db路徑 若id!=googleid將會無法存取
-                    if (ref != null) {
-                        ref.removeEventListener(mChildEventListener);
-                    }
-                    ref = database.getReference(USER_DATABASE_PATH+"/"+mAuth.getCurrentUser().getUid());
-                    ref.addChildEventListener(mChildEventListener);
+
+                    if (accountRef != null)
+                        accountRef.removeEventListener(accountEventListener);
+                    accountRef = database.getReference(USER_DATABASE_PATH+"/"+mAuth.getCurrentUser().getUid()+"/"+ACCOUNT_DATABASE_KEY);
+                    accountRef.addChildEventListener(accountEventListener);
 
                     if (borrowRef != null)
                         borrowRef.removeEventListener(borrowEventListener);
                     borrowRef = GetUserDatabaseRef(BORROWBOOK_DATABASE_KEY);
                     borrowRef.addChildEventListener(borrowEventListener);
 
-                    borrowRef.getParent().child("trigger").removeValue(); // 觸發重新爬借閱紀錄
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("trigger", "go");
+                    //borrowRef.removeValue(); // 刪除清單 TODO
+                    borrowRef.getParent().updateChildren(data); // 觸發重新爬借閱紀錄
                     if (SettingsFragment.Instance != null){
                         SettingsFragment.Instance.UpdateUI(true);
                     }
@@ -125,71 +128,52 @@ public class AccountManager {
         };
 
         // 定義 Firebase 資料庫 Account Listener
-        mChildEventListener = new ChildEventListener() {
+        accountEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
                 //Log.d(LOG_FLAG, "DataAdd    "+dataSnapshot.getKey()+" "+dataSnapshot.getValue());
-                if (dataSnapshot.getKey().equals(ACCOUNT_DATABASE_KEY)) {
-                    Iterator<DataSnapshot> iter = dataSnapshot.getChildren().iterator();
-                    while (iter.hasNext()) {
-                        DataSnapshot iterSnapshot = iter.next();
-                        HashMap<String, String> data = (HashMap<String, String>)iterSnapshot.getValue();
-                        String account = data.get("account");
+                HashMap<String, String> data = (HashMap<String, String>)dataSnapshot.getValue();
 
-                        libraryAccount.put(iterSnapshot.getKey(), account);
-                        libraryState.put(iterSnapshot.getKey(), AccountUnit.FINISH);
-                        if (data.containsKey("State")) {
-                            if (data.get("State").equals(PENDING_STATE)) {
-                                libraryState.put(iterSnapshot.getKey(), AccountUnit.PENDING);
-                            } else if (data.get("State").equals(ERROR_STATE)) {
-                                libraryState.put(iterSnapshot.getKey(), AccountUnit.ERROR);
-                            }
-                        }
-                        if (SettingsFragment.Instance != null) {
-                            SettingsFragment.Instance.UpdateAccount(iterSnapshot.getKey());
-                        }
+                libraryAccount.put(dataSnapshot.getKey(), data.get("account"));
+                libraryState.put(dataSnapshot.getKey(), AccountUnit.FINISH);
+                if (data.containsKey("State")) {
+                    if (data.get("State").equals(PENDING_STATE)) {
+                        libraryState.put(dataSnapshot.getKey(), AccountUnit.PENDING);
                     }
+                    else if (data.get("State").equals(ERROR_STATE)) {
+                        libraryState.put(dataSnapshot.getKey(), AccountUnit.ERROR);
+                    }
+                }
+                if (SettingsFragment.Instance != null) {
+                    SettingsFragment.Instance.UpdateUI(true);
                 }
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
                 //Log.d(LOG_FLAG, "DataChange "+dataSnapshot.getKey()+" "+dataSnapshot.getValue());
-                if (dataSnapshot.getKey().equals(ACCOUNT_DATABASE_KEY)) {
-                    libraryAccount.clear();
-                    Iterator<DataSnapshot> iter = dataSnapshot.getChildren().iterator();
-                    while (iter.hasNext()) {
-                        DataSnapshot iterSnapshot = iter.next();
-                        HashMap<String, String> data = (HashMap<String, String>)iterSnapshot.getValue();
-                        String account = data.get("account");
+                HashMap<String, String> data = (HashMap<String, String>)dataSnapshot.getValue();
 
-                        libraryAccount.put(iterSnapshot.getKey(), account);
-                        libraryState.put(iterSnapshot.getKey(), AccountUnit.FINISH);
-                        if (data.containsKey("key") || data.containsKey("State") && data.get("State").equals(PENDING_STATE)){
-                            libraryState.put(iterSnapshot.getKey(), AccountUnit.PENDING);
-                        }
-                        else if (data.containsKey("State") && data.get("State").equals(ERROR_STATE)){
-                            libraryState.put(iterSnapshot.getKey(), AccountUnit.ERROR);
-                        }
+                libraryAccount.put(dataSnapshot.getKey(), data.get("account"));
+                libraryState.put(dataSnapshot.getKey(), AccountUnit.FINISH);
+                if (data.containsKey("State")) {
+                    if (data.get("State").equals(PENDING_STATE) || data.get("State").equals(INITAL_STATE)) {
+                        libraryState.put(dataSnapshot.getKey(), AccountUnit.PENDING);
+                    } else if (data.get("State").equals(ERROR_STATE)) {
+                        libraryState.put(dataSnapshot.getKey(), AccountUnit.ERROR);
                     }
-                    if (SettingsFragment.Instance != null) {
-                        SettingsFragment.Instance.UpdateUI(true);
-                    }
+                }
+                if (SettingsFragment.Instance != null) {
+                    SettingsFragment.Instance.UpdateUI(true);
                 }
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 //Log.d(LOG_FLAG, "DataRemove "+dataSnapshot.getKey()+" "+dataSnapshot.getValue());
-                if (dataSnapshot.getKey().equals(ACCOUNT_DATABASE_KEY)) {
-                    Iterator<DataSnapshot> iter = dataSnapshot.getChildren().iterator();
-                    while (iter.hasNext()) {
-                        DataSnapshot iterSnapshot = iter.next();
-                        libraryAccount.remove(iterSnapshot.getKey());
-                        if (SettingsFragment.Instance != null) {
-                            SettingsFragment.Instance.UpdateAccount(iterSnapshot.getKey());
-                        }
-                    }
+                libraryAccount.remove(dataSnapshot.getKey());
+                if (SettingsFragment.Instance != null) {
+                    SettingsFragment.Instance.UpdateUI(true);
                 }
             }
 
@@ -238,8 +222,8 @@ public class AccountManager {
         if (mAuth != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
-        if (ref != null) {
-            ref.removeEventListener(mChildEventListener);
+        if (accountRef != null) {
+            accountRef.removeEventListener(accountEventListener);
         }
         if (borrowRef != null) {
             borrowRef.removeEventListener(borrowEventListener);
@@ -250,7 +234,7 @@ public class AccountManager {
     public void GoogleSignIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         mActivity.startActivityForResult(signInIntent, RC_SIGN_IN);
-        if(SettingsFragment.Instance!=null){
+        if(SettingsFragment.Instance != null) {
             SettingsFragment.Instance.UpdateUI(true);
         }
     }
@@ -258,7 +242,11 @@ public class AccountManager {
     // Google 登出
     public void GoogleSignOut() {
         mAuth.signOut();
-        if(SettingsFragment.Instance!=null){
+        libraryState.clear();
+        libraryAccount.clear();
+        borrowBookList.clear();
+        borrowedBookList.clear();
+        if(SettingsFragment.Instance != null) {
             SettingsFragment.Instance.UpdateUI(false);
         }
 
@@ -295,9 +283,30 @@ public class AccountManager {
         }
     }
 
+    public void SendUpdateAccount(String lib, String account, String password) {
+        // 修改帳號密碼
+        if (account.equals("") || password.equals("")) {
+            Toast.makeText(mActivity.getApplicationContext(), "請輸入完整的帳號和密碼", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Map<String, Object> users = new HashMap<>();
+            users.put(lib+"/account", account);
+            users.put(lib+"/password", password);
+            users.put(lib+"/State", "pending");
+            users.put(lib+"/key", "go");
+            accountRef.updateChildren(users);
+            //Toast.makeText(mActivity.getApplicationContext(), "Account update success: Update account & passwd.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void SendDeleteAccount(String lib){
+        accountRef.child(lib).removeValue();
+        Toast.makeText(mActivity.getApplicationContext(), "帳號登出成功", Toast.LENGTH_SHORT).show();
+    }
+
     // 取得 User Database 路徑
     public DatabaseReference GetUserDatabaseRef(String path){
-        if(mAuth != null)
+        if(mAuth.getCurrentUser() != null)
             return database.getReference(USER_DATABASE_PATH+"/"+mAuth.getCurrentUser().getUid()+"/"+path);
         else
             return null;
@@ -305,7 +314,10 @@ public class AccountManager {
 
     // 取得 google 名稱
     public String GetGoogleAccountName() {
-        return mAuth.getCurrentUser()!=null?mAuth.getCurrentUser().getDisplayName():"Please Login";
+        if (mAuth.getCurrentUser() != null)
+            return mAuth.getCurrentUser().getDisplayName();
+        else
+            return null;
     }
 
     // 取得 library 帳號
@@ -322,34 +334,5 @@ public class AccountManager {
             return libraryState.get(lib);
         else
             return AccountUnit.FINISH;
-    }
-
-    public void UpdateLibaccount(String lib, String account, String password) {
-        // 修改帳號密碼
-        if (CheckAccountAvailable(account, password)) {
-            Map<String, Object> users = new HashMap<>();
-            users.put(ACCOUNT_DATABASE_KEY+"/"+lib+"/account", account);
-            users.put(ACCOUNT_DATABASE_KEY+"/"+lib+"/password", password);
-            users.put(ACCOUNT_DATABASE_KEY+"/"+lib+"/key", "go");
-            //libraryAccount.put(lib, account);
-            ref.updateChildren(users);
-            //Toast.makeText(mActivity.getApplicationContext(), "Account update success: Update account & passwd.", Toast.LENGTH_SHORT).show();
-        }
-        // 刪除帳號
-        else if (account.equals("") && password.equals("")) { //TODO: 暫時以兩個欄位都為空白就刪除帳號
-            ref.child(ACCOUNT_DATABASE_KEY+"/"+lib).removeValue();
-            Toast.makeText(mActivity.getApplicationContext(), "帳號登出。", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            Toast.makeText(mActivity.getApplicationContext(), "請輸入完整的帳號和密碼。", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    // 判斷帳號密碼是否合法 可能以後不會需要
-    public boolean CheckAccountAvailable(String account, String password){
-        if (account.equals("") || password.equals("")) {
-            return false;
-        }
-        return true;
     }
 }

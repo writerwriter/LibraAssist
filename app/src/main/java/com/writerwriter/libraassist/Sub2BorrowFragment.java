@@ -33,12 +33,9 @@ import java.util.List;
 
 
 public class Sub2BorrowFragment extends Fragment {
-    //private List<BorrowBookUnit> borrowBookList = new ArrayList<>();
     private RecyclerView borrowListView;
     private LinearLayoutManager linearLayoutManager;
-    public Sub2BorrowFragment() {
-        // Required empty public constructor
-    }
+    public Sub2BorrowFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,13 +43,9 @@ public class Sub2BorrowFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_sub2_borrow, container, false);
 
-        //TODO:在這加入書籍借閱的資訊到list裡。
-
-        //borrowBookList.add(new BorrowBookUnit("a","a","a","a","a","a","a","a"));
-
         BorrowBookAdapter adapter = new BorrowBookAdapter(AccountManager.Instance.borrowedBookList,
                 getContext());
-        borrowListView = (RecyclerView)v.findViewById(R.id.borrow_book_recyclerView2);
+        borrowListView = v.findViewById(R.id.borrow_book_recyclerView2);
         borrowListView.setHasFixedSize(true);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         borrowListView.setLayoutManager(linearLayoutManager);
