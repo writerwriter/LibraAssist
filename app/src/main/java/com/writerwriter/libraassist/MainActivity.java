@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         mAccountManager.Init();
 
         toolbar = (Toolbar) findViewById(R.id.app_bar);
-        toolbar.setTitle("Home");
+        toolbar.setTitle("新書推薦");
         mMenu = (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.ic_menu_animatable);
         mBack = (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.ic_back_animatable);
         toolbar.setNavigationIcon(mMenu);
@@ -167,28 +167,28 @@ public class MainActivity extends AppCompatActivity {
                                 if(mainFragment==null) {
                                     mainFragment = new MainFragment();
                                     fragmentTransaction.setCustomAnimations(R.anim.fade_in,R.anim.fade_out).replace(R.id.load_fragment, mainFragment, "homeFragment");
-                                    toolbar.setTitle("Home");
+                                    toolbar.setTitle("新書推薦");
                                 }
                                 break;
                             case R.id.action_collection:
                                 if(collectionFragment==null) {
                                     collectionFragment = new CollectionFragment();
                                     fragmentTransaction.setCustomAnimations(R.anim.fade_in,R.anim.fade_out).replace(R.id.load_fragment, collectionFragment, "collectionFragment");
-                                    toolbar.setTitle("Collection");
+                                    toolbar.setTitle("館藏查詢");
                                 }
                                 break;
                             case R.id.action_borrow:
                                 if(borrowFragment==null) {
                                     borrowFragment = new BorrowFragment();
                                     fragmentTransaction.setCustomAnimations(R.anim.fade_in,R.anim.fade_out).replace(R.id.load_fragment, borrowFragment, "borrowFragment");
-                                    toolbar.setTitle("Borrow");
+                                    toolbar.setTitle("借閱紀錄");
                                 }
                                 break;
                             case R.id.action_info:
                                 if(libraryInfoFragment==null) {
                                     libraryInfoFragment = new LibraryInfoFragment();
                                     fragmentTransaction.setCustomAnimations(R.anim.fade_in,R.anim.fade_out).replace(R.id.load_fragment, libraryInfoFragment, "libraryInfoFragment");
-                                    toolbar.setTitle("Info");
+                                    toolbar.setTitle("圖書館資訊");
                                 }
                                 break;
                         }

@@ -38,9 +38,9 @@ public class BorrowFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_borrow, container, false);
         tabs = v.findViewById(R.id.tabs);
-        tabs.addTab(tabs.newTab().setText("Borrow"));
-        tabs.addTab(tabs.newTab().setText("Borrowed"));
-        tabs.addTab(tabs.newTab().setText("Tags"));
+        tabs.addTab(tabs.newTab().setText("借閱中"));
+        tabs.addTab(tabs.newTab().setText("借閱歷史"));
+        tabs.addTab(tabs.newTab().setText("書籤"));
         return v;
     }
 

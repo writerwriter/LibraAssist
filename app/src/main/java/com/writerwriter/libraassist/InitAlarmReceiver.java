@@ -42,15 +42,19 @@ public class InitAlarmReceiver extends BroadcastReceiver {
             }
             long left_time_millis = return_date.getTime() - cur.getTime();
             int left_time_days =(int)(left_time_millis / 1000 / 60 / 60 / 24);
-            Toast.makeText(context,""+left_time_millis,Toast.LENGTH_SHORT).show();
-            if(left_time_days > 0 && left_time_days <= 20){
+            if(left_time_days > 0 && left_time_days <= 7){
                 Intent intent2 = new Intent();
                 intent2.setClass(context,AlarmReceiver.class);
                 intent2.putExtra("title",borrowBookUnit.getBook_name());
                 intent2.putExtra("time",left_time_days);
-                PendingIntent pending = PendingIntent.getBroadcast(context,i,intent2,0);
+                PendingIntent pending1 = PendingIntent.getBroadcast(context,i * 3,intent,PendingIntent.FLAG_CANCEL_CURRENT);
+                PendingIntent pending2 = PendingIntent.getBroadcast(context,i * 3 + 1,intent,PendingIntent.FLAG_CANCEL_CURRENT);
+                PendingIntent pending3 = PendingIntent.getBroadcast(context,i * 3 + 2,intent,PendingIntent.FLAG_CANCEL_CURRENT);
                 AlarmManager alarm = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
-                alarm.set(AlarmManager.RTC_WAKEUP, cur.getTime()+60*1000,pending);
+                //書本要到期的前三天會通知
+                alarm.set(AlarmManager.RTC_WAKEUP, return_date.getTime()-3*24*60*60*60,pending1);
+                alarm.set(AlarmManager.RTC_WAKEUP, return_date.getTime()-2*24*60*60*60,pending2);
+                alarm.set(AlarmManager.RTC_WAKEUP, return_date.getTime()-1*24*60*60*60,pending3);
             }
         }
 

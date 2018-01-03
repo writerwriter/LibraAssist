@@ -16,14 +16,16 @@
             android:id="@+id/remove_btn"
             android:layout_width="60dp"
             android:layout_height="match_parent"
-            android:text="Remove"
-            android:background="#FF0000"/>
+            android:text="移除"
+            android:textColor="@android:color/white"
+            android:background="#b52e2b"/>
         <Button
             android:id="@+id/edit_btn"
             android:layout_width="60dp"
             android:layout_height="match_parent"
-            android:text="Edit"
-            android:background="#FFFF00"/>
+            android:text="修改"
+            android:textColor="@android:color/white"
+            android:background="@color/colorPrimary"/>
 
     </LinearLayout>
     <RelativeLayout
@@ -36,11 +38,13 @@
             android:id="@+id/tag_text"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:textColor="@android:color/black"
             android:layout_gravity="start" />
         <TextView
             android:id="@+id/tag_pages"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:textColor="@android:color/black"
             android:layout_gravity="end"
             android:layout_alignParentEnd="true"/>
 

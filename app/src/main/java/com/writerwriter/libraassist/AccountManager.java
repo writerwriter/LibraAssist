@@ -271,7 +271,7 @@ public class AccountManager {
                             else {
                                 // Authentication failed
                                 Log.d(LOG_FLAG, "Authentication failed.");
-                                Toast.makeText(mActivity.getApplicationContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mActivity.getApplicationContext(), "驗證失敗", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -279,7 +279,7 @@ public class AccountManager {
         } else {
             // Google Sign In failed, update UI appropriately.
             Log.d(LOG_FLAG, "ERROR : Google Sign In failed.");
-            Toast.makeText(mActivity.getApplicationContext(), "ERROR : Google Sign In failed.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivity.getApplicationContext(), "錯誤:google登入失敗", Toast.LENGTH_SHORT).show();
         }
     }
 

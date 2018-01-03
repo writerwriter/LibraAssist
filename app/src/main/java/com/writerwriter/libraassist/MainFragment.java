@@ -1,6 +1,7 @@
 package com.writerwriter.libraassist;
 
 import android.content.Context;
+import android.graphics.drawable.AnimatedVectorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 import android.widget.ViewSwitcher;
 
 import com.google.firebase.database.ChildEventListener;
@@ -40,6 +42,11 @@ public class MainFragment extends Fragment {
     private FeatureCoverFlow coverFlow;
     private NewBooksAdapter newBooksAdapter;
     private TextSwitcher mTitle;
+
+    public android.support.v7.widget.Toolbar toolbar = MainActivity.toolbar;
+    public AnimatedVectorDrawable mBack = MainActivity.mBack;
+    public AnimatedVectorDrawable mMenu = MainActivity.mMenu;
+
 
     private DatabaseReference newbookRef;
     private ChildEventListener mNewbookEventListener;
@@ -114,6 +121,8 @@ public class MainFragment extends Fragment {
                             fragmentTransaction.add(R.id.load_fragment,collectionBookDetailFragment, "CollectionBookDetailFragment");
                             fragmentTransaction.addToBackStack("CollectionBookDetailFragment");
                             fragmentTransaction.commit();
+                            toolbar.setNavigationIcon(mMenu);
+                            mMenu.start();
                         }
                     }
                     //loading中

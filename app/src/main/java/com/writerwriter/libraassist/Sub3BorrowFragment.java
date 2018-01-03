@@ -107,21 +107,21 @@ public class Sub3BorrowFragment extends Fragment{
                 customDialogView.setVisibility(View.VISIBLE);
                 new MaterialDialog.Builder(getContext())
                         .title("新增書籤")
-                        .positiveText("Add")
-                        .negativeText("Cancel")
+                        .positiveText("新增")
+                        .negativeText("取消")
                         .onAny(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 switch (which){
                                     case POSITIVE:
                                         if (e2.getText().toString().equals("")){
-                                            Toast.makeText(getContext(),"The page is empty.",Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getContext(),"請輸入頁數",Toast.LENGTH_SHORT).show();
                                             break;
                                         }
                                         boolean check = true;
                                         for (int i=0; i<list.size(); i++){
                                             if(list.get(i).getTag_text().equals(e1.getText().toString())){
-                                                Toast.makeText(getContext(),"Bookmark is already exist.",Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getContext(),"書籤已經存在",Toast.LENGTH_SHORT).show();
                                                 check = false;
                                                 break;
                                             }

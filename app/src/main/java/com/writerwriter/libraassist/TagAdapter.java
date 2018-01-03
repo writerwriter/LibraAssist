@@ -71,11 +71,11 @@ public class TagAdapter extends BaseSwipeAdapter{
             @Override
             public void onClick(View view) {
                 new MaterialDialog.Builder(mContext)
-                        .title("Edit tag")
-                        .positiveText("Apply")
-                        .negativeText("Cancel")
+                        .title("修改書籤")
+                        .positiveText("確認")
+                        .negativeText("取消")
                         .inputType(InputType.TYPE_CLASS_NUMBER)
-                        .input("Enter pages:", "", new MaterialDialog.InputCallback() {
+                        .input("輸入頁數:", "", new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
                                 //list.get(position).setTag_pages(input.toString());

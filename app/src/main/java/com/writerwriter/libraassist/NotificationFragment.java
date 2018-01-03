@@ -14,7 +14,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,7 +28,7 @@ public class NotificationFragment extends Fragment {
     private List<NotificationUnit> notificationUnitList = new ArrayList<>();
     private RecyclerView notificationListView;
     private LinearLayoutManager linearLayoutManager;
-    private int notification_days = 20;
+    private int notification_days = 7;
 
     public NotificationFragment() {
         // Required empty public constructor
@@ -63,7 +62,6 @@ public class NotificationFragment extends Fragment {
             }
             long left_time_millis = return_date.getTime() - cur.getTime();
             int left_time_days =(int)(left_time_millis / 1000 / 60 / 60 / 24);
-            Toast.makeText(getContext(),""+left_time_millis,Toast.LENGTH_SHORT).show();
             if(left_time_days > 0 && left_time_days <= notification_days){
                 notificationUnitList.add(new NotificationUnit(borrowBookUnit.getBook_name(), ""+left_time_days,borrowBookUnit.getLocation()));
 
@@ -72,9 +70,14 @@ public class NotificationFragment extends Fragment {
                 intent.putExtra("title",borrowBookUnit.getBook_name());
                 intent.putExtra("time",left_time_days);
                 intent.putExtra("id",i);
-                PendingIntent pending = PendingIntent.getBroadcast(getContext(),i,intent,0);
+                PendingIntent pending1 = PendingIntent.getBroadcast(getContext(),i * 3,intent,PendingIntent.FLAG_CANCEL_CURRENT);
+                PendingIntent pending2 = PendingIntent.getBroadcast(getContext(),i * 3 + 1,intent,PendingIntent.FLAG_CANCEL_CURRENT);
+                PendingIntent pending3 = PendingIntent.getBroadcast(getContext(),i * 3 + 2,intent,PendingIntent.FLAG_CANCEL_CURRENT);
                 AlarmManager alarm = (AlarmManager) getContext().getSystemService(getContext().ALARM_SERVICE);
-                alarm.set(AlarmManager.RTC_WAKEUP, cur.getTime()+30*1000,pending);
+                //書本要到期的前三天會通知
+                alarm.set(AlarmManager.RTC_WAKEUP, return_date.getTime()-3*24*60*60*60,pending1);
+                alarm.set(AlarmManager.RTC_WAKEUP, return_date.getTime()-2*24*60*60*60,pending2);
+                alarm.set(AlarmManager.RTC_WAKEUP, return_date.getTime()-1*24*60*60*60,pending3);
             }
         }
         NotificationAdapter adapter = new NotificationAdapter(notificationUnitList,getContext());
