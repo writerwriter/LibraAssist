@@ -17,6 +17,7 @@ import java.util.List;
 public class Sub1BorrowFragment extends Fragment {
     private RecyclerView borrowListView;
     private LinearLayoutManager linearLayoutManager;
+    private BorrowBookAdapter adapter;
     public Sub1BorrowFragment() {}
 
     @Override
@@ -25,7 +26,7 @@ public class Sub1BorrowFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_sub1_borrow, container, false);
 
-        BorrowBookAdapter adapter = new BorrowBookAdapter(AccountManager.Instance.borrowBookList,
+        adapter = new BorrowBookAdapter(AccountManager.Instance.borrowBookList,
                 getContext());
         borrowListView = v.findViewById(R.id.borrow_book_recyclerView);
         borrowListView.setHasFixedSize(true);
@@ -35,4 +36,5 @@ public class Sub1BorrowFragment extends Fragment {
 
         return v;
     }
+
 }
