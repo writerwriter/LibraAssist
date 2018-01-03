@@ -55,20 +55,23 @@ public class CollectionFragment extends Fragment {
 
     private static final String SEARCH_KEY       = "search";
     private static final String SEARCHKEY_KEY    = "key";
+    private static final String TCLIB_URL_KEY  = "tc_url";   // firebase在TC收到幾本書
     private static final String NTCLIB_URL_KEY   = "Xinpei_url"; // firebase在NTC搜到幾本書
     private static final String NTPULIB_URL_KEY  = "ntpu_url";   // firebase在NTPU收到幾本書
     private static final String RESULT_KEY       = "search_result";
+    private static final String TEMP_TCLIB_KEY  = "temp_search_tc";
     private static final String TEMP_NTCLIB_KEY  = "temp_result_Xinpei";
     private static final String TEMP_NTPULIB_KEY = "temp_search_ntpu";
     private static final String HOTKEY_PATH      = "hot_key";
-    private static final int HOTKEY_SHOW_NUM = 10; // 要顯示幾筆HOTKEY
 
     private String searchTime = "";
+    private int tc_url = 999999;
     private int ntpu_url = 999999;
     private int Xinpei_url = 999999;
 
     private DatabaseReference searchRef;
     private DatabaseReference resultRef;
+    private DatabaseReference tcRef;
     private DatabaseReference ntcRef;
     private DatabaseReference ntpuRef;
     private DatabaseReference hotkeyRef;
@@ -89,26 +92,31 @@ public class CollectionFragment extends Fragment {
     private BookLoading bookLoadingAnimation;
 
     public CollectionFragment(){
+        // 檢查index數量 linstener 接收書本數量正確時才會顯示清單
         mSearchEventListener = new ChildEventListener() {
             @Override public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {}
             @Override public void onChildRemoved(DataSnapshot dataSnapshot) {}
 
             @Override public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
-                if (dataSnapshot.getKey().equals(NTCLIB_URL_KEY)) {
+                if (dataSnapshot.getKey().equals(NTCLIB_URL_KEY))
                     Xinpei_url = Integer.parseInt((String)dataSnapshot.getValue());
-                }
-                else if (dataSnapshot.getKey().equals(NTPULIB_URL_KEY)) {
+                else if (dataSnapshot.getKey().equals(NTPULIB_URL_KEY))
                     ntpu_url = Integer.parseInt((String)dataSnapshot.getValue());
-                }
-                if (searchResult.size() == Xinpei_url + ntpu_url) {
-                    if (searchRef != null) searchRef.removeEventListener(mSearchEventListener);
+                else if (dataSnapshot.getKey().equals(TCLIB_URL_KEY))
+                    tc_url = Integer.parseInt((String)dataSnapshot.getValue());
+
+                if (searchResult.size() == tc_url + Xinpei_url + ntpu_url) {
                     ShowBookList();
+                }
+                if (tc_url + Xinpei_url + ntpu_url < 999999) {
+                    searchRef.removeEventListener(mSearchEventListener);
                 }
             }
 
             @Override public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
             @Override public void onCancelled(DatabaseError databaseError) {}
         };
+        // 書本資訊 linstener
         mResultEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
@@ -116,13 +124,13 @@ public class CollectionFragment extends Fragment {
                 String link = data.get("link");
                 if (searchResult.containsKey(link)) {
                     searchResult.get(link).SetInfo(data);
-                    Log.d(LOG_FLAG, "詳細資料 "+searchResult.get(link).getLink()+" "+link+" "+searchResult.get(link).getTitle());
+                    Log.d(LOG_FLAG, "詳細資料 "+data.get("location")+" "+link+" "+searchResult.get(link).getTitle());
                 }
                 else {
                     CollectionSearchResultUnit info = new CollectionSearchResultUnit(data);
                     searchResult.put(link, info);
-                    Log.d(LOG_FLAG, "新增目錄 "+searchResult.get(link).getLink()+" "+link+" "+searchResult.get(link).getTitle());
-                    if (searchResult.size() == Xinpei_url + ntpu_url) {
+                    Log.d(LOG_FLAG, "新增目錄 "+data.get("location")+" "+link+" "+searchResult.get(link).getTitle());
+                    if (searchResult.size() == tc_url + Xinpei_url + ntpu_url) {
                         ShowBookList();
                     }
                 }
@@ -132,15 +140,13 @@ public class CollectionFragment extends Fragment {
             @Override public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
             @Override public void onCancelled(DatabaseError databaseError) {}
         };
+        // 熱門關鍵字 linstener
         mHotkeyEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
                 if (dataSnapshot.getKey().equals("result")){
                     HashMap<String, String> data = (HashMap<String, String>)dataSnapshot.getValue();
                     hotkey.addAll(data.values());
-                    // 暫時顯示熱門關鍵字
-                    //Toast.makeText(getContext(), hotkey.toString(), Toast.LENGTH_SHORT).show();
-
                     for(int i=0;i<hotkey.size()&&i<textViews.size();i++){
                         textViews.get(i).setText(hotkey.get(i));
                         textViews.get(i).setOnClickListener(new View.OnClickListener() {
@@ -156,7 +162,7 @@ public class CollectionFragment extends Fragment {
                         });
                     }
 
-                    Log.d(LOG_FLAG, "Got Hotkey List. Num :"+hotkey.size());
+                    Log.d(LOG_FLAG, "Got Hotkey List. Num : "+hotkey.size());
                     hotkeyRef.removeEventListener(mHotkeyEventListener);
                 }
             }
@@ -239,7 +245,6 @@ public class CollectionFragment extends Fragment {
                     return false;
                 }
                 searchView.clearFocus();
-
                 bookLoadingAnimation.setVisibility(View.VISIBLE);
                 bookLoadingAnimation.start();
 
@@ -257,23 +262,29 @@ public class CollectionFragment extends Fragment {
                     collectionSearchResults.setAdapter(null);
                 }
 
+                tc_url = 999999;
+                Xinpei_url = 999999;
+                ntpu_url = 999999;
                 searchTime = new Date().toString();
                 if (searchRef != null) searchRef.removeEventListener(mSearchEventListener);
                 if (resultRef != null) resultRef.removeEventListener(mResultEventListener);
+                if (tcRef     != null) tcRef.removeEventListener(mResultEventListener);
                 if (ntcRef    != null) ntcRef.removeEventListener(mResultEventListener);
                 if (ntpuRef   != null) ntpuRef.removeEventListener(mResultEventListener);
                 AccountManager.Instance.GetUserDatabaseRef(SEARCH_KEY).removeValue();
+
                 searchRef = AccountManager.Instance.GetUserDatabaseRef(SEARCH_KEY+"/"+searchTime);
                 resultRef = AccountManager.Instance.GetUserDatabaseRef(SEARCH_KEY+"/"+searchTime+"/"+RESULT_KEY);
+                tcRef     = AccountManager.Instance.GetUserDatabaseRef(SEARCH_KEY+"/"+searchTime+"/"+TEMP_TCLIB_KEY);
                 ntcRef    = AccountManager.Instance.GetUserDatabaseRef(SEARCH_KEY+"/"+searchTime+"/"+TEMP_NTCLIB_KEY);
                 ntpuRef   = AccountManager.Instance.GetUserDatabaseRef(SEARCH_KEY+"/"+searchTime+"/"+TEMP_NTPULIB_KEY);
                 searchRef.addChildEventListener(mSearchEventListener);
                 resultRef.addChildEventListener(mResultEventListener);
+                tcRef.addChildEventListener(mResultEventListener);
                 ntcRef.addChildEventListener(mResultEventListener);
                 ntpuRef.addChildEventListener(mResultEventListener);
 
-                Xinpei_url = 999999;
-                ntpu_url = 999999;
+                // 設定trigger
                 Map<String, Object> users = new HashMap<>();
                 users.put(SEARCHKEY_KEY, query);
                 searchRef.updateChildren(users);
@@ -306,6 +317,7 @@ public class CollectionFragment extends Fragment {
     public void ShowBookList() {
         bookLoadingAnimation.stop();
         bookLoadingAnimation.setVisibility(View.GONE);
+
         // 新增至清單內
         collectionSearchResultUnits.clear();
         collectionSearchResultUnits.addAll(searchResult.values());
@@ -316,6 +328,7 @@ public class CollectionFragment extends Fragment {
         collectionSearchResultAdapter.setHasStableIds(true);
         collectionSearchResultAdapter.notifyDataSetChanged();
         collectionSearchResults.setAdapter(collectionSearchResultAdapter);
+        Log.d(LOG_FLAG, "Got Book Index List. Num :　"+searchResult.size());
 
         /*hide = AnimationUtils.loadAnimation(getContext(),R.anim.slide_out_bottom);
         appear = AnimationUtils.loadAnimation(getContext(),R.anim.slide_in_top);
@@ -363,10 +376,5 @@ public class CollectionFragment extends Fragment {
                 }
             }
         });*/
-
-        Log.d(LOG_FLAG, "Show BookList Num:"+searchResult.size());
-        Xinpei_url = 999999;
-        ntpu_url = 999999;
     }
-
 }

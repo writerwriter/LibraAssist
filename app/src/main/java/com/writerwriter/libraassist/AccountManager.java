@@ -107,12 +107,9 @@ public class AccountManager {
                     if (borrowRef != null)
                         borrowRef.removeEventListener(borrowEventListener);
                     borrowRef = GetUserDatabaseRef(BORROWBOOK_DATABASE_KEY);
-
-                    Map<String, Object> data = new HashMap<>();
-                    data.put("trigger", "go");
-                    //borrowRef.removeValue(); // 刪除清單 TODO
-                    borrowRef.getParent().updateChildren(data); // 觸發重新爬借閱紀錄
+                    TriggerBorrowSearch();
                     borrowRef.addChildEventListener(borrowEventListener);
+
                     if (SettingsFragment.Instance != null){
                         SettingsFragment.Instance.UpdateUI(true);
                     }
@@ -143,6 +140,9 @@ public class AccountManager {
                     else if (data.get("State").equals(ERROR_STATE)) {
                         libraryState.put(dataSnapshot.getKey(), AccountUnit.ERROR);
                     }
+                    else {
+                        TriggerBorrowSearch();
+                    }
                 }
                 if (SettingsFragment.Instance != null) {
                     SettingsFragment.Instance.UpdateUI(true);
@@ -159,8 +159,12 @@ public class AccountManager {
                 if (data.containsKey("State")) {
                     if (data.get("State").equals(PENDING_STATE) || data.get("State").equals(INITAL_STATE)) {
                         libraryState.put(dataSnapshot.getKey(), AccountUnit.PENDING);
-                    } else if (data.get("State").equals(ERROR_STATE)) {
+                    }
+                    else if (data.get("State").equals(ERROR_STATE)) {
                         libraryState.put(dataSnapshot.getKey(), AccountUnit.ERROR);
+                    }
+                    else {
+                        TriggerBorrowSearch();
                     }
                 }
                 if (SettingsFragment.Instance != null) {
@@ -302,6 +306,13 @@ public class AccountManager {
     public void SendDeleteAccount(String lib){
         accountRef.child(lib).removeValue();
         Toast.makeText(mActivity.getApplicationContext(), "帳號登出成功", Toast.LENGTH_SHORT).show();
+    }
+
+    public void TriggerBorrowSearch(){
+        Map<String, Object> data = new HashMap<>();
+        data.put("trigger", "go");
+        borrowRef.removeValue(); // 刪除清單
+        borrowRef.getParent().updateChildren(data); // 觸發重新爬借閱紀錄
     }
 
     // 取得 User Database 路徑
