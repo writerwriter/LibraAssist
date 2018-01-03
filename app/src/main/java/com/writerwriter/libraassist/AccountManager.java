@@ -54,7 +54,7 @@ public class AccountManager {
     private static final String PENDING_STATE = "pending";
     private static final String ERROR_STATE = "Error";
 
-    public FirebaseAuth mAuth;
+    private FirebaseAuth mAuth;
     private final AppCompatActivity mActivity;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private GoogleApiClient mGoogleApiClient;
@@ -107,12 +107,12 @@ public class AccountManager {
                     if (borrowRef != null)
                         borrowRef.removeEventListener(borrowEventListener);
                     borrowRef = GetUserDatabaseRef(BORROWBOOK_DATABASE_KEY);
-                    borrowRef.addChildEventListener(borrowEventListener);
 
                     Map<String, Object> data = new HashMap<>();
                     data.put("trigger", "go");
                     //borrowRef.removeValue(); // 刪除清單 TODO
                     borrowRef.getParent().updateChildren(data); // 觸發重新爬借閱紀錄
+                    borrowRef.addChildEventListener(borrowEventListener);
                     if (SettingsFragment.Instance != null){
                         SettingsFragment.Instance.UpdateUI(true);
                     }
@@ -189,7 +189,7 @@ public class AccountManager {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
                 HashMap<String, String> data = (HashMap<String, String>) dataSnapshot.getValue();
-                if (data.containsKey("return_time"))
+                if (data.containsKey("renew_count"))
                     borrowBookList.add(new BorrowBookUnit(data));
                 else
                     borrowedBookList.add(new BorrowBookUnit(data));
@@ -211,7 +211,7 @@ public class AccountManager {
 
     // 初始化 啟動Listerner
     public void Init() {
-        if (mAuthListener != null) {
+        if (mAuth != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
         mAuth.addAuthStateListener(mAuthListener);
