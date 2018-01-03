@@ -69,6 +69,8 @@ public class CollectionBookDetailFragment extends Fragment {
         web.loadUrl(collectionSearchResultUnit.getLink());
         web.setBackgroundColor(Color.WHITE);
         web.setVisibility(View.GONE);
+        web.getSettings().setBuiltInZoomControls(true);
+        web.getSettings().setDisplayZoomControls(false);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
