@@ -309,6 +309,8 @@ public class AccountManager {
     }
 
     public void TriggerBorrowSearch(){
+        borrowBookList.clear();
+        borrowedBookList.clear();
         Map<String, Object> data = new HashMap<>();
         data.put("trigger", "go");
         borrowRef.removeValue(); // 刪除清單

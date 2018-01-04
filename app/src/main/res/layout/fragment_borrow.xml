@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         app:tabMode="fixed"
         app:tabTextColor="@android:color/white"
-        app:tabSelectedTextColor="@android:color/white"/>
+        app:tabSelectedTextColor="@android:color/white"
+        app:tabIndicatorColor="@android:color/white"/>
     <FrameLayout
         android:id="@+id/borrowSubPageContainer"
         android:layout_width="match_parent"
